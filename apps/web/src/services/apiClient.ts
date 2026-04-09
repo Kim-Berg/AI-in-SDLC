@@ -1,0 +1,54 @@
+const API_BASE = '/api';
+
+async function request<T>(path: string, options?: RequestInit): Promise<T> {
+  const token = localStorage.getItem('zava_token');
+  const headers: Record<string, string> = {
+    'Content-Type': 'application/json',
+    ...(token ? { Authorization: `Bearer ${token}` } : {}),
+  };
+
+  const res = await fetch(`${API_BASE}${path}`, { ...options, headers });
+
+  if (!res.ok) {
+    const error = await res.json().catch(() => ({ message: 'Request failed' }));
+    throw new Error(error.message || `HTTP ${res.status}`);
+  }
+
+  if (res.status === 204) return undefined as T;
+  return res.json();
+}
+
+export const api = {
+  // Products
+  getProducts: (category?: string) =>
+    request<{ data: any[]; total: number }>(category ? `/products?category=${category}` : '/products'),
+
+  getProduct: (id: string) => request<any>(`/products/${id}`),
+
+  getCategories: () => request<{ data: string[] }>('/products/categories/list'),
+
+  // Cart
+  getCart: () => request<any>('/cart'),
+
+  addToCart: (productId: string, quantity: number) =>
+    request<any>('/cart/items', {
+      method: 'POST',
+      body: JSON.stringify({ productId, quantity }),
+    }),
+
+  removeFromCart: (itemId: string) =>
+    request<void>(`/cart/items/${itemId}`, { method: 'DELETE' }),
+
+  // Auth
+  login: (email: string, password: string) =>
+    request<{ token: string; user: any }>('/auth/login', {
+      method: 'POST',
+      body: JSON.stringify({ email, password }),
+    }),
+
+  register: (email: string, password: string, name: string) =>
+    request<{ token: string; user: any }>('/auth/register', {
+      method: 'POST',
+      body: JSON.stringify({ email, password, name }),
+    }),
+};

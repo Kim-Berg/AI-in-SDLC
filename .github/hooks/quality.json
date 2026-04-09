@@ -1,0 +1,53 @@
+{
+  "$schema": "https://github.com/features/copilot/schemas/hooks.json",
+  "hooks": {
+    "PostToolUse": [
+      {
+        "description": "Auto-format edited files with Prettier",
+        "match": {
+          "toolName": "replace_string_in_file|create_file|edit_notebook_file"
+        },
+        "steps": [
+          {
+            "tool": "run_in_terminal",
+            "args": {
+              "command": "npx prettier --write \"$FILE_PATH\"",
+              "explanation": "Formatting the edited file with Prettier"
+            }
+          }
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "description": "Prevent accidental destructive commands",
+        "match": {
+          "toolName": "run_in_terminal",
+          "commandPattern": "rm -rf /|drop database|git push --force"
+        },
+        "steps": [
+          {
+            "tool": "reject",
+            "args": {
+              "reason": "Destructive command blocked by safety hook. Use the VS Code UI or a safer alternative."
+            }
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "description": "Require tests to pass before agent stops",
+        "steps": [
+          {
+            "tool": "run_in_terminal",
+            "args": {
+              "command": "npm test --workspaces --if-present 2>&1 | tail -20",
+              "explanation": "Running test suite to verify all tests pass before completing"
+            }
+          }
+        ]
+      }
+    ]
+  }
+}
