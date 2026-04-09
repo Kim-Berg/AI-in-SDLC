@@ -5,10 +5,4 @@ export type { User, LoginInput, RegisterInput, AuthResponse } from './types/user
 export type { ApiError, PaginatedResponse } from './types/api.js';
 
 // Utils
-export { formatPrice, truncate, slugify } from './utils/formatting.js';
-export {
-  validateEmail,
-  validatePassword,
-  validateRequired,
-  validatePositiveNumber,
-} from './utils/validation.js';
+export { formatPrice } from './utils/formatting.js';

@@ -3,6 +3,8 @@ import { prisma } from '../models/prisma.js';
 
 export const productsRouter = Router();
 
+// TODO(copilot): Add review routes here during Demo 2, including paginated reads.
+
 // GET /api/products — list all products
 productsRouter.get('/', async (req: Request, res: Response) => {
   const { category } = req.query;

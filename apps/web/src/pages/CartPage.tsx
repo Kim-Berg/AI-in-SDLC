@@ -26,7 +26,17 @@ export function CartPage() {
         <>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
             {items.map((item) => (
-              <CartItemRow key={item.id} item={item} onRemove={() => removeItem(item.id)} />
+              <CartItemRow
+                key={item.id}
+                id={item.id}
+                name={item.product.name}
+                price={item.product.price}
+                quantity={item.quantity}
+                imageUrl={item.product.imageUrl}
+                onRemove={() => {
+                  void removeItem(item.id);
+                }}
+              />
             ))}
           </div>
 

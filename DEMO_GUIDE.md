@@ -1,226 +1,199 @@
-# Demo Guide — AI in the SDLC with GitHub Copilot Agents
+# Demo Guide — AI in SDLC with GitHub Copilot Agents
 
-**Session**: 45-60 min | **Audience**: Developers | **Level**: Advanced  
-**Presenters**: You + your co-presenter  
-**Tech stack**: TypeScript, Node.js, React, Prisma
+**Session**: 55 min  
+**Audience**: Hands-on developers  
+**Presenters**: Presenter A + Presenter B  
+**Repo**: `zava-storefront`  
+**Tech stack**: TypeScript monorepo, Express, Prisma, React, Vite, Vitest
 
----
+## Session Goal
 
-## Setup checklist (before the session)
+Demonstrate GitHub Copilot agents across the full SDLC using a realistic e-commerce codebase with enough existing functionality that the live demos extend real code instead of scaffolding from zero.
 
-- [ ] Clone the repo and run `npm install`
-- [ ] Run `npx prisma generate && npx prisma db push && npx prisma db seed` (in `apps/api`)
-- [ ] Start API: `cd apps/api && npm run dev`
-- [ ] Start web: `cd apps/web && npm run dev`
-- [ ] Open VS Code with the repo root as workspace
-- [ ] Verify Copilot Chat is enabled (Agent, Plan, and Ask modes visible)
-- [ ] Have GitHub Issues #42 (product search) and #43 (wishlist) ready
-- [ ] Set VS Code font size to 16+ for projector visibility
+## Pre-seeded Demo Assets
 
----
+- Working product listing + products API
+- Basic cart flow
+- JWT authentication
+- 25 passing tests across API and web
+- Admin layout stub
+- Email service stub
+- Custom agents in `.github/agents/`
+- Workspace hooks in `.github/hooks/quality.json`
 
-## Narrative arc
+## Session Structure
 
-| # | Phase | SDLC Stage | Demo | Agent type shown | Time |
-|---|-------|-----------|------|-----------------|------|
-| 1 | Intro | — | Slides: What are Copilot agents? Agent loop explained | — | 5 min |
-| 2 | Demo 1 | Planning | Use **Plan** agent to break down Issue #42 | Built-in (Plan) | 7 min |
-| 3 | Demo 2 | Coding | Use **@tdd** custom agent for product reviews feature | Custom agent + subagents | 10 min |
-| 4 | Demo 3 | Coding | Use **Agent mode** to add discount code to cart | Built-in (Agent) | 8 min |
-| 5 | Demo 4 | Testing & Review | Use **@reviewer** agent + hooks in action | Custom agent + hooks | 7 min |
-| 6 | Demo 5 | Full feature | Use **@feature-builder** for admin dashboard scaffold | Custom coordinator agent | 8 min |
-| 7 | Demo 6 | CI/CD | Show **Copilot coding agent** (cloud) handling a PR | Cloud agent | 5 min |
-| 8 | Wrap-up | — | Recap: agent types, customisation, SDLC coverage | — | 5 min |
+| # | Demo | Presenter | Duration | SDLC Phase | Agent Type |
+|---|------|-----------|----------|------------|------------|
+| — | Opening: agent types overview, agent loop concept, permission levels | A | 5 min | Concepts | — |
+| 1 | Plan Agent: design a review & rating system | A | 7 min | Requirements → Design | Local — Plan |
+| 2 | Agent Loop: hand off plan to Agent, build the feature live | A | 10 min | Implementation | Local — Agent |
+| 3 | Custom Agents + Hooks + Subagents: TDD workflow with Red/Green/Refactor subagents, automated quality gates | B | 10 min | Implementation + Quality | Custom agents, Hooks, Subagents |
+| 4 | Ask Agent: codebase Q&A and security analysis | B | 5 min | Knowledge / Onboarding | Local — Ask |
+| 5 | Copilot CLI: background implementation of admin panel + parallel email notifications | B | 8 min | Parallel Development | Copilot CLI (Background) |
+| 6 | Cloud Agent: assign GitHub Issue to Copilot, hand off Plan → Cloud, TODO comment assignment | A | 8 min | Code Review + Collaboration | Cloud |
+| — | Closing: SDLC recap, call to action | Both | 2 min | Wrap-up | — |
 
----
+Presenter A owns the flow arc: plan → implement → collaborate.  
+Presenter B owns the advanced toolkit: custom agents, quality gates, background work, and Q&A.
 
-## Demo 1 — Planning with Plan Agent (7 min)
+## Demo 1 — Plan Agent (Presenter A, 7 min)
 
-**SDLC stage**: Requirements → Planning  
-**Agent type**: Built-in Plan agent  
-**Presenter**: A
+**Prompt**
 
-### Steps
+> We need to add a product review & rating system to the Zava storefront. Customers can rate 1-5 stars, write text reviews, see aggregate ratings on product cards. Reviews need moderation before publishing.
 
-1. Open Copilot Chat → switch to **Plan** mode.
-2. Paste: _"Plan the implementation of GitHub Issue #42: Add product search to the storefront. The search should work across product names and descriptions, with a search bar in the header."_
-3. Walk through the generated plan — highlight how it identifies files to create/modify.
-4. Show plan editing — add or remove a step.
-5. Point out: "This is the **Planning** stage of the SDLC, powered by an AI agent."
+**Flow**
 
-### Talking points
-- Plan agent creates a step-by-step implementation plan without writing code.
-- Plans can be edited, shared, and executed later.
-- Great for breaking down issues before a sprint.
+1. Select the Plan agent in the Chat view.
+2. Let the agent explore the codebase and identify the relevant files: Prisma schema, product routes, shared types, product UI, and product detail page.
+3. Answer clarifying questions if the agent asks about moderation rules, anonymous reviews, or aggregate display.
+4. Review the generated plan and highlight schema changes, API endpoints, UI components, moderation workflow, and verification steps.
 
----
+**Talking points**
 
-## Demo 2 — TDD with Custom Subagents (10 min)
+- Plan before you build.
+- The agent researches the actual codebase before producing a plan.
+- A useful plan becomes an asset you can hand off to implementation or the cloud.
 
-**SDLC stage**: Development (test-first)  
-**Agent type**: Custom agents with subagent orchestration  
-**Presenter**: B
+## Demo 2 — Agent Loop (Presenter A, 10 min)
 
-### Steps
+**Flow**
 
-1. Show the `.github/agents/` folder — explain the 4 TDD agents.
-2. Open Copilot Chat → type: _"@tdd Add a product reviews feature. Customers can submit a 1-5 star rating and text review for any product. Reviews appear on the product detail page."_
-3. Watch the orchestration:
-   - **TDD agent** plans the slices.
-   - **Red agent** writes a failing test (e.g., `GET /api/products/:id/reviews` returns 200).
-   - **Green agent** implements the Prisma model + route to pass the test.
-   - **Refactor agent** cleans up.
-4. Show the terminal output — tests going red → green.
-5. Show the generated code: Prisma schema change, new route, new test.
+1. Hand off from Plan to Agent with **Start Implementation**.
+2. Show the loop in real time: read plan → edit shared types → add API route → run build/tests → self-correct type errors → add a React component.
+3. Pause on inline diffs and checkpoints.
+4. Show the tools panel so the audience can see the tool usage pattern.
 
-### Talking points
-- Custom agents are defined in `.agent.md` files — version-controlled with your repo.
-- Subagents enable **separation of concerns** in AI workflows.
-- The `user-invocable: false` flag keeps internal agents hidden from the chat UI.
-- TDD is a natural fit for agent orchestration: each phase has clear boundaries.
+**Talking points**
 
----
+- The agent loop is iterative: plan → act → observe → adapt.
+- Copilot uses repo context, tool feedback, and errors to self-correct.
+- This is not generate-and-paste; it is execution with feedback.
 
-## Demo 3 — Agent Mode for Feature Implementation (8 min)
+## Demo 3 — Custom Agents + Hooks + Subagents (Presenter B, 10 min)
 
-**SDLC stage**: Development (feature work)  
-**Agent type**: Built-in Agent mode  
-**Presenter**: A
+### 3a. TDD workflow with subagents
 
-### Steps
+Show `.github/agents/tdd.agent.md` and explain the Red → Green → Refactor orchestration.
 
-1. Switch Copilot Chat to **Agent** mode.
-2. Prompt: _"Add a discount code field to the cart page. The API should validate codes against a hardcoded list: ZAVA10 (10% off), ZAVA20 (20% off). Show the discount and updated total on the cart page."_
-3. Let the agent work — it will:
-   - Create a discount validation route.
-   - Modify the cart API to accept a discount code.
-   - Add a text input + "Apply" button to `CartPage.tsx`.
-   - Update the total calculation.
-4. Accept/reject individual changes as they appear.
-5. Run `npm test` to show existing tests still pass.
+**Prompt**
 
-### Talking points
-- Agent mode has full tool access: file editing, terminal, search.
-- The **agent loop**: plan → tool call → observe → plan → repeat.
-- `copilot-instructions.md` guides the agent's coding style.
-- Show how the Vite proxy and API work together seamlessly.
+> @tdd Add input validation for review text — min 10 chars, max 2000, no HTML tags.
 
----
+**Expected flow**
 
-## Demo 4 — Code Review & Hooks (7 min)
+1. Red subagent writes a failing test.
+2. Green subagent implements the minimum validation.
+3. Refactor subagent cleans up.
+4. Tool calls appear as nested, collapsible subagent activity in chat.
 
-**SDLC stage**: Review & Quality  
-**Agent type**: Custom agent + lifecycle hooks  
-**Presenter**: B
+### 3b. Hooks and quality gates
 
-### Steps
+Show `.github/hooks/quality.json` and explain the three hooks:
 
-1. Show `.github/hooks/quality.json` — explain the three hooks:
-   - **PostToolUse**: Auto-format with Prettier after each file edit.
-   - **PreToolUse**: Block destructive terminal commands.
-   - **Stop**: Run full test suite before agent completes.
-2. Prompt: _"@reviewer Review the changes made in the last two demos (product reviews and discount codes)."_
-3. Show the reviewer output: file-by-file feedback with severity labels (🔴🟡🟢).
-4. If the reviewer finds issues → fix them, demonstrating the feedback loop.
-5. Try typing `rm -rf /` in a terminal step to show the PreToolUse hook blocking it.
+- `PostToolUse`: runs Prettier after file edits
+- `PreToolUse`: blocks dangerous terminal commands
+- `Stop`: prevents the agent from finishing before tests pass
 
-### Talking points
-- Hooks are **guardrails** — prevent mistakes before they happen.
-- Custom review agents encode your team's quality standards.
-- Hooks run automatically in the agent loop — no manual intervention.
-- This is the **Code Review** stage of the SDLC, automated and consistent.
+**Live action**
 
----
+1. Trigger a normal edit so the formatting hook runs.
+2. Try a clearly dangerous terminal command to show the block.
+3. Let the session hit the Stop hook and continue until tests pass.
 
-## Demo 5 — Full Feature with Feature Builder (8 min)
+**Talking point**
 
-**SDLC stage**: End-to-end delivery  
-**Agent type**: Custom coordinator agent (multi-agent)  
-**Presenter**: A
+Instructions guide. Hooks enforce.
 
-### Steps
+## Demo 4 — Ask Agent (Presenter B, 5 min)
 
-1. Prompt: _"@feature-builder Build an admin dashboard at /admin that shows: total products, total users, recent orders (last 5). Include an API route GET /api/admin/stats (admin-only) and a simple React page."_
-2. Watch the feature-builder orchestrate:
-   - Plans the vertical slices.
-   - Delegates to **@tdd** for each slice.
-   - Calls **@reviewer** for quality gate.
-3. Show the result: new API route, new admin page, tests, all passing.
+**Prompt 1**
 
-### Talking points
-- Coordinator agents can compose other agents into workflows.
-- The `agents:` field in the frontmatter declares dependencies.
-- This is the closest to an **autonomous developer** — plans, builds, tests, reviews.
-- In real projects, this pattern scales to complex features.
+> How does the cart system work? Walk me through the data flow from add-to-cart click to API persistence.
 
----
+**Prompt 2**
 
-## Demo 6 — Copilot Coding Agent (Cloud) (5 min)
+> What are the security considerations for the review system we just built?
 
-**SDLC stage**: CI/CD & Maintenance  
-**Agent type**: Cloud agent (Copilot coding agent)  
-**Presenter**: B
+**Talking points**
 
-### Steps
+- Ask mode behaves like an always-available senior developer who reads the code.
+- Good answers follow imports, routes, shared types, and data flow.
+- Security analysis is more useful when it references the real implementation.
 
-1. Open GitHub in the browser → navigate to Issue #43 (wishlist feature).
-2. Assign the issue to **Copilot**.
-3. Show Copilot creating a branch and working in a cloud environment.
-4. Switch to the PR that Copilot creates — show the diff.
-5. Point out: it runs in a **firewalled VM**, uses the repo's `.github/copilot-instructions.md` and agents.
+## Demo 5 — Copilot CLI (Presenter B, 8 min)
 
-### Talking points
-- Cloud agents work **asynchronously** — assign and walk away.
-- They use the same customisation files as local agents.
-- Great for well-scoped issues: bug fixes, refactors, feature additions.
-- The agent creates a PR, runs CI, and you review the result.
+Run two background sessions with worktree isolation.
 
----
+**CLI Prompt A**
 
-## Wrap-up (5 min)
+> Add a review moderation admin panel — list pending reviews, approve/reject buttons, filter by product.
 
-### Key messages
+**CLI Prompt B**
 
-1. **Agent types recap**:
-   - **Built-in** (Agent, Plan, Ask) — general-purpose, no setup needed.
-   - **Custom** (`.agent.md`) — encode team workflows, version-controlled.
-   - **Cloud** (Copilot coding agent) — async PR generation.
-   - **Third-party** (Claude Code, OpenAI Codex) — bring other models in.
+> Add email notification when a review is approved.
 
-2. **Agent loop**: Every agent follows the same loop: understand → plan → act (tool use) → observe → repeat.
+**Talking points**
 
-3. **Customisation layers**:
-   - `copilot-instructions.md` — coding standards.
-   - `.agent.md` files — specialised workflows.
-   - `hooks/` — guardrails and automation.
-   - Subagents — composable agent architectures.
+- Background agents work while you keep coding.
+- Parallel sessions are useful when the work is independent.
+- Worktree isolation keeps the experiments reviewable.
 
-4. **SDLC coverage**: Planning → Development → Testing → Review → Deployment — agents touch every stage.
+## Demo 6 — Cloud Agent (Presenter A, 8 min)
 
-### Call to action
-- Start with `copilot-instructions.md` — immediate value, zero risk.
-- Add one custom agent for your team's most common workflow.
-- Experiment with hooks for automated formatting and quality gates.
+### 6a. Assign GitHub Issue #1 to Copilot
 
----
+Use the prewritten issue template for product search. Show Copilot picking up the issue, creating a branch, implementing the work, and opening a PR.
 
-## Fallback prompts (if demos go wrong)
+### 6b. Plan → Cloud handoff for wishlist
 
-| Demo | Fallback |
-|------|----------|
-| Plan agent hangs | Switch to Ask mode and manually outline the plan |
-| TDD agent confusion | Run the Red/Green/Refactor prompts manually in Agent mode |
-| Hook doesn't trigger | Show the JSON config and explain what it would do |
-| Cloud agent slow | Show a pre-recorded GIF or screenshot of the PR |
+Start with a new local Plan session for the wishlist feature, then continue in Cloud so the audience sees the local-to-cloud handoff.
 
----
+### 6c. TODO assignment
 
-## Repo state after all demos
+Use the inline comment sentinel in the review flow and show how a `TODO(copilot)` comment can be handed off directly from the editor.
 
-```
-git log --oneline
-abc1234 feat(web): add admin dashboard (Demo 5)
-def5678 feat(api): add discount codes (Demo 3)
-ghi9012 feat(api): add product reviews with TDD (Demo 2)
-jkl3456 chore: initial Zava storefront setup
-```
+**Talking points**
+
+- Cloud agents are a team multiplier.
+- Plan locally, execute in the cloud, and review via PR.
+- Repo customizations apply to both local and cloud execution.
+
+## Preparation Checklist
+
+- Create the GitHub repo and add both presenters as collaborators.
+- Run `npm install`.
+- Run `npm run db:push` and `npm run db:seed`.
+- Start the API with `npm run dev:api`.
+- Start the web app with `npm run dev:web`.
+- Verify Chat modes are available: Ask, Plan, and Agent.
+- Verify hooks are enabled in VS Code.
+- Use the seeded GitHub issues: #1 for product search and #2 for wishlist.
+- Dry-run each demo at least three times.
+- Record fallback videos for each live demo.
+- Keep a browser tab open to the repo, issues, and PR view.
+
+## Verification
+
+- All 6 demos can be executed sequentially from a clean checkout.
+- Plan agent produces a meaningful plan for the review feature.
+- Agent loop creates at least one API route and one React component.
+- TDD subagent cycle is visibly orchestrated in chat.
+- Hooks fire visibly: formatting after edit, Stop hook blocks until tests pass.
+- Ask agent explains cart flow with correct file references.
+- Copilot CLI runs in background with worktree isolation.
+- Cloud agent picks up assigned issues and opens a PR.
+
+## Decisions
+
+- Mention third-party agents in the opening only; keep live demos focused on Copilot-native experiences.
+- Use Autopilot permission in Demos 2 and 5 for smoother flow.
+- Use Default Approvals in Demo 3 so the audience can see approval UX.
+- Keep the pre-seeded monorepo; it is the point of the demo.
+
+## Further Considerations
+
+- If time allows, add a short MCP bonus demo.
+- Consider making the repo public after the session.
+- A small opening/closing slide deck helps anchor the narrative.
