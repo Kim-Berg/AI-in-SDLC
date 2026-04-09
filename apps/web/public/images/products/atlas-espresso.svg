@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 1200" role="img" aria-label="Zava Atlas Espresso Blend">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#3b2419"/>
+      <stop offset="100%" stop-color="#8a5638"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="1200" fill="url(#bg)"/>
+  <circle cx="964" cy="210" r="164" fill="#dca977" opacity="0.28"/>
+  <rect x="96" y="96" width="1008" height="1008" rx="36" fill="#fff7ee" opacity="0.08"/>
+  <path d="M332 338h436c78 0 140 63 140 140v46c0 77-62 140-140 140H332c-46 0-84-38-84-84V422c0-46 38-84 84-84z" fill="#f8ebdd"/>
+  <path d="M823 463h79c40 0 72 32 72 72s-32 72-72 72h-79" fill="none" stroke="#f8ebdd" stroke-width="34" stroke-linecap="round"/>
+  <path d="M340 292c62 8 104 31 128 68 19 29 25 61 18 98" fill="none" stroke="#f7cc9a" stroke-width="24" stroke-linecap="round"/>
+  <path d="M501 270c58 6 98 28 120 66 18 31 22 67 11 108" fill="none" stroke="#f7cc9a" stroke-width="24" stroke-linecap="round"/>
+  <text x="118" y="174" fill="#fff2e4" font-size="32" font-family="Segoe UI, sans-serif" letter-spacing="6">COFFEE</text>
+  <text x="118" y="936" fill="#fffdf9" font-size="106" font-family="Georgia, serif" font-weight="700">ZAVA</text>
+  <text x="118" y="1012" fill="#f6d1b1" font-size="54" font-family="Segoe UI, sans-serif">Atlas Espresso Blend</text>
+</svg>

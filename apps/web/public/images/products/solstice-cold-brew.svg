@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 1200" role="img" aria-label="Zava Solstice Cold Brew Flight">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#2d2223"/>
+      <stop offset="100%" stop-color="#6c5551"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="1200" fill="url(#bg)"/>
+  <rect x="150" y="720" width="900" height="84" rx="32" fill="#f7e8d8" opacity="0.88"/>
+  <g fill="#f9efe6">
+    <rect x="232" y="310" width="160" height="420" rx="44"/>
+    <rect x="520" y="250" width="160" height="480" rx="44"/>
+    <rect x="808" y="340" width="160" height="390" rx="44"/>
+  </g>
+  <g fill="#4f322c">
+    <rect x="252" y="420" width="120" height="250" rx="24"/>
+    <rect x="540" y="360" width="120" height="310" rx="24"/>
+    <rect x="828" y="450" width="120" height="220" rx="24"/>
+  </g>
+  <text x="118" y="168" fill="#fff6ef" font-size="32" font-family="Segoe UI, sans-serif" letter-spacing="6">COFFEE</text>
+  <text x="118" y="936" fill="#fffdf9" font-size="106" font-family="Georgia, serif" font-weight="700">ZAVA</text>
+  <text x="118" y="1012" fill="#f2d8cb" font-size="54" font-family="Segoe UI, sans-serif">Solstice Cold Brew Flight</text>
+</svg>

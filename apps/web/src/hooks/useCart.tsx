@@ -1,6 +1,6 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import type { ReactNode } from 'react';
-import { api } from '../services/apiClient';
+import { ApiError, api } from '../services/apiClient';
 
 interface CartItem {
   id: string;
@@ -56,6 +56,15 @@ function getStoredUser(): StoredUser | null {
   }
 }
 
+function clearStoredSession(): void {
+  localStorage.removeItem('zava_token');
+  localStorage.removeItem('zava_user');
+}
+
+function isUnauthorizedError(error: unknown): boolean {
+  return error instanceof ApiError && error.statusCode === 401;
+}
+
 export function CartProvider({ children }: { children: ReactNode }) {
   const [cart, setCart] = useState<Cart | null>(null);
   const [loading, setLoading] = useState(true);
@@ -69,10 +78,22 @@ export function CartProvider({ children }: { children: ReactNode }) {
       const data = await api.getCart();
       setCart(data);
     } catch (err) {
+      if (isUnauthorizedError(err)) {
+        clearStoredSession();
+        setDemoUserName(null);
+      }
       setError(err instanceof Error ? err.message : 'Failed to load cart');
     } finally {
       setLoading(false);
     }
+  }, []);
+
+  const loginDemoCustomer = useCallback(async () => {
+    const auth = await api.login(DEMO_CUSTOMER.email, DEMO_CUSTOMER.password);
+    localStorage.setItem('zava_token', auth.token);
+    localStorage.setItem('zava_user', JSON.stringify(auth.user));
+    setDemoUserName(auth.user.name);
+    return auth;
   }, []);
 
   const ensureDemoSession = useCallback(async () => {
@@ -82,24 +103,33 @@ export function CartProvider({ children }: { children: ReactNode }) {
       const existingToken = localStorage.getItem('zava_token');
 
       if (!existingToken) {
-        const auth = await api.login(DEMO_CUSTOMER.email, DEMO_CUSTOMER.password);
-        localStorage.setItem('zava_token', auth.token);
-        localStorage.setItem('zava_user', JSON.stringify(auth.user));
-        setDemoUserName(auth.user.name);
+        await loginDemoCustomer();
       } else if (!demoUserName) {
         setDemoUserName(getStoredUser()?.name ?? null);
       }
 
-      const data = await api.getCart();
-      setCart(data);
+      try {
+        const data = await api.getCart();
+        setCart(data);
+      } catch (err) {
+        if (!isUnauthorizedError(err)) {
+          throw err;
+        }
+
+        clearStoredSession();
+        const auth = await loginDemoCustomer();
+        const data = await api.getCart();
+        setDemoUserName(auth.user.name);
+        setCart(data);
+      }
     } catch (err) {
-      localStorage.removeItem('zava_token');
-      localStorage.removeItem('zava_user');
+      clearStoredSession();
+      setDemoUserName(null);
       setError(err instanceof Error ? err.message : 'Failed to establish demo session');
     } finally {
       setLoading(false);
     }
-  }, [demoUserName]);
+  }, [demoUserName, loginDemoCustomer]);
 
   useEffect(() => {
     void ensureDemoSession();
@@ -111,6 +141,10 @@ export function CartProvider({ children }: { children: ReactNode }) {
       const data = await api.addToCart(productId, quantity);
       setCart(data);
     } catch (err) {
+      if (isUnauthorizedError(err)) {
+        clearStoredSession();
+        setDemoUserName(null);
+      }
       setError(err instanceof Error ? err.message : 'Failed to add item');
     }
   }, []);
@@ -131,6 +165,10 @@ export function CartProvider({ children }: { children: ReactNode }) {
           : null,
       );
     } catch (err) {
+      if (isUnauthorizedError(err)) {
+        clearStoredSession();
+        setDemoUserName(null);
+      }
       setError(err instanceof Error ? err.message : 'Failed to remove item');
     }
   }, []);

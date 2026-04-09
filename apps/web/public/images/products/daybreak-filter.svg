@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 1200" role="img" aria-label="Zava Daybreak Filter Roast">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#70513a"/>
+      <stop offset="100%" stop-color="#d2a063"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="1200" fill="url(#bg)"/>
+  <circle cx="918" cy="232" r="190" fill="#ffe4b4" opacity="0.36"/>
+  <rect x="122" y="188" width="420" height="630" rx="22" fill="#f8ead8"/>
+  <rect x="580" y="188" width="240" height="630" rx="20" fill="#faefe0" opacity="0.92"/>
+  <rect x="854" y="188" width="120" height="630" rx="20" fill="#faefe0" opacity="0.8"/>
+  <path d="M246 376h176" stroke="#cb9362" stroke-width="24" stroke-linecap="round"/>
+  <path d="M246 462h176" stroke="#cb9362" stroke-width="24" stroke-linecap="round"/>
+  <path d="M246 548h176" stroke="#cb9362" stroke-width="24" stroke-linecap="round"/>
+  <path d="M246 634h176" stroke="#cb9362" stroke-width="24" stroke-linecap="round"/>
+  <text x="118" y="168" fill="#fff7ec" font-size="32" font-family="Segoe UI, sans-serif" letter-spacing="6">COFFEE</text>
+  <text x="118" y="936" fill="#fffdf9" font-size="106" font-family="Georgia, serif" font-weight="700">ZAVA</text>
+  <text x="118" y="1012" fill="#fff0d4" font-size="54" font-family="Segoe UI, sans-serif">Daybreak Filter Roast</text>
+</svg>

@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
+import { prisma } from '../models/prisma.js';
 
 // In production, JWT_SECRET must be set as an environment variable.
 // The fallback is only used for local development and testing.
@@ -13,7 +14,7 @@ export interface AuthenticatedRequest extends Request {
   userRole?: string;
 }
 
-export function authenticate(req: AuthenticatedRequest, res: Response, next: NextFunction): void {
+export async function authenticate(req: AuthenticatedRequest, res: Response, next: NextFunction): Promise<void> {
   const authHeader = req.headers.authorization;
   if (!authHeader?.startsWith('Bearer ')) {
     res.status(401).json({ message: 'Missing or invalid authorization header', code: 'UNAUTHORIZED', statusCode: 401 });
@@ -23,8 +24,18 @@ export function authenticate(req: AuthenticatedRequest, res: Response, next: Nex
   const token = authHeader.slice(7);
   try {
     const payload = jwt.verify(token, JWT_SECRET) as { userId: string; role: string };
+    const user = await prisma.user.findUnique({
+      where: { id: payload.userId },
+      select: { id: true, role: true },
+    });
+
+    if (!user) {
+      res.status(401).json({ message: 'Invalid or expired token', code: 'UNAUTHORIZED', statusCode: 401 });
+      return;
+    }
+
     req.userId = payload.userId;
-    req.userRole = payload.role;
+    req.userRole = user.role;
     next();
   } catch {
     res.status(401).json({ message: 'Invalid or expired token', code: 'UNAUTHORIZED', statusCode: 401 });

@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 1200" role="img" aria-label="Zava Nomad Travel Tumbler">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#2f3d38"/>
+      <stop offset="100%" stop-color="#7b9a82"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="1200" fill="url(#bg)"/>
+  <path d="M408 226h384l-34 742c-4 78-68 140-146 140h-24c-78 0-142-62-146-140l-34-742z" fill="#e8f2eb"/>
+  <rect x="456" y="150" width="288" height="106" rx="28" fill="#d6e7d9"/>
+  <path d="M484 452h232" stroke="#9fbba6" stroke-width="18" stroke-linecap="round"/>
+  <path d="M484 552h232" stroke="#9fbba6" stroke-width="18" stroke-linecap="round"/>
+  <path d="M484 652h232" stroke="#9fbba6" stroke-width="18" stroke-linecap="round"/>
+  <text x="118" y="168" fill="#eef8ef" font-size="32" font-family="Segoe UI, sans-serif" letter-spacing="6">ACCESSORIES</text>
+  <text x="118" y="936" fill="#fffdf9" font-size="106" font-family="Georgia, serif" font-weight="700">ZAVA</text>
+  <text x="118" y="1012" fill="#ddefdc" font-size="54" font-family="Segoe UI, sans-serif">Nomad Travel Tumbler</text>
+</svg>

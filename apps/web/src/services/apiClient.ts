@@ -1,5 +1,15 @@
 const API_BASE = '/api';
 
+export class ApiError extends Error {
+  statusCode: number;
+
+  constructor(message: string, statusCode: number) {
+    super(message);
+    this.name = 'ApiError';
+    this.statusCode = statusCode;
+  }
+}
+
 async function request<T>(path: string, options?: RequestInit): Promise<T> {
   const token = localStorage.getItem('zava_token');
   const headers: Record<string, string> = {
@@ -11,7 +21,7 @@ async function request<T>(path: string, options?: RequestInit): Promise<T> {
 
   if (!res.ok) {
     const error = await res.json().catch(() => ({ message: 'Request failed' }));
-    throw new Error(error.message || `HTTP ${res.status}`);
+    throw new ApiError(error.message || `HTTP ${res.status}`, res.status);
   }
 
   if (res.status === 204) return undefined as T;
