@@ -55,11 +55,11 @@ export function CartPage() {
               <span>Subtotal ({items.length} items)</span>
               <strong>{formatPrice(total)}</strong>
             </div>
-            <button className="btn btn--primary" style={{ width: '100%' }}>
-              Checkout
-            </button>
+            <Link to="/checkout" className="btn btn--primary" style={{ width: '100%' }}>
+              Proceed to Checkout
+            </Link>
 
-            {/* Discount code field will be added here during Demo 3 */}
+
           </div>
         </>
       )}

@@ -4,17 +4,47 @@
       <stop offset="0%" stop-color="#70513a"/>
       <stop offset="100%" stop-color="#d2a063"/>
     </linearGradient>
+    <linearGradient id="bag" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#faf0e4"/>
+      <stop offset="100%" stop-color="#eddcc8"/>
+    </linearGradient>
   </defs>
   <rect width="1200" height="1200" fill="url(#bg)"/>
-  <circle cx="918" cy="232" r="190" fill="#ffe4b4" opacity="0.36"/>
-  <rect x="122" y="188" width="420" height="630" rx="22" fill="#f8ead8"/>
-  <rect x="580" y="188" width="240" height="630" rx="20" fill="#faefe0" opacity="0.92"/>
-  <rect x="854" y="188" width="120" height="630" rx="20" fill="#faefe0" opacity="0.8"/>
-  <path d="M246 376h176" stroke="#cb9362" stroke-width="24" stroke-linecap="round"/>
-  <path d="M246 462h176" stroke="#cb9362" stroke-width="24" stroke-linecap="round"/>
-  <path d="M246 548h176" stroke="#cb9362" stroke-width="24" stroke-linecap="round"/>
-  <path d="M246 634h176" stroke="#cb9362" stroke-width="24" stroke-linecap="round"/>
-  <text x="118" y="168" fill="#fff7ec" font-size="32" font-family="Segoe UI, sans-serif" letter-spacing="6">COFFEE</text>
-  <text x="118" y="936" fill="#fffdf9" font-size="106" font-family="Georgia, serif" font-weight="700">ZAVA</text>
-  <text x="118" y="1012" fill="#fff0d4" font-size="54" font-family="Segoe UI, sans-serif">Daybreak Filter Roast</text>
+  <circle cx="918" cy="232" r="190" fill="#ffe4b4" opacity="0.2"/>
+  <!-- Coffee bag - kraft paper style -->
+  <path d="M320 280h460v620c0 22-18 40-40 40H360c-22 0-40-18-40-40V280z" fill="url(#bag)"/>
+  <!-- Bag top with fold -->
+  <path d="M300 280h500l-40-70H340z" fill="#eddcc8"/>
+  <path d="M340 210c25-35 55-50 90-50h240c35 0 65 15 90 50" fill="#f5e6d2" opacity="0.6"/>
+  <rect x="420" y="190" width="260" height="14" rx="4" fill="#b07840"/>
+  <!-- Coffee filter/dripper illustration on bag -->
+  <path d="M440 420l110 180 110-180z" fill="#d2a063" opacity="0.3"/>
+  <path d="M460 430l90 150 90-150z" fill="none" stroke="#b07840" stroke-width="3"/>
+  <!-- Coffee drip lines -->
+  <path d="M550 590v60" stroke="#b07840" stroke-width="4" stroke-linecap="round" opacity="0.5"/>
+  <path d="M550 665v30" stroke="#b07840" stroke-width="3" stroke-linecap="round" opacity="0.4"/>
+  <path d="M550 710v15" stroke="#b07840" stroke-width="2" stroke-linecap="round" opacity="0.3"/>
+  <!-- Decorative stripe -->
+  <rect x="320" y="770" width="460" height="5" rx="2.5" fill="#b07840" opacity="0.25"/>
+  <!-- Morning sun rays behind -->
+  <circle cx="900" cy="500" r="120" fill="#ffe4b4" opacity="0.15"/>
+  <path d="M900 360v-40" stroke="#ffe4b4" stroke-width="4" opacity="0.2" stroke-linecap="round"/>
+  <path d="M990 410l28-28" stroke="#ffe4b4" stroke-width="4" opacity="0.2" stroke-linecap="round"/>
+  <path d="M1020 500h40" stroke="#ffe4b4" stroke-width="4" opacity="0.2" stroke-linecap="round"/>
+  <path d="M990 590l28 28" stroke="#ffe4b4" stroke-width="4" opacity="0.2" stroke-linecap="round"/>
+  <path d="M810 410l-28-28" stroke="#ffe4b4" stroke-width="4" opacity="0.2" stroke-linecap="round"/>
+  <!-- Filter coffee cup -->
+  <ellipse cx="880" cy="880" rx="100" ry="20" fill="#70513a" opacity="0.25"/>
+  <path d="M800 720h160v140c0 28-22 50-50 50h-60c-28 0-50-22-50-50V720z" fill="#faf0e4"/>
+  <ellipse cx="880" cy="720" rx="80" ry="18" fill="#eddcc8"/>
+  <ellipse cx="880" cy="718" rx="64" ry="13" fill="#8a5e38"/>
+  <!-- Steam -->
+  <path d="M860 700c-6-24 2-48 10-68" fill="none" stroke="#faf0e4" stroke-width="3" opacity="0.35" stroke-linecap="round"/>
+  <path d="M880 694c0-26 8-50 2-72" fill="none" stroke="#faf0e4" stroke-width="3" opacity="0.3" stroke-linecap="round"/>
+  <path d="M900 700c6-24-2-48-8-68" fill="none" stroke="#faf0e4" stroke-width="3" opacity="0.25" stroke-linecap="round"/>
+  <!-- Scattered coffee beans -->
+  <ellipse cx="220" cy="780" rx="24" ry="16" transform="rotate(-25 220 780)" fill="#5c3a20"/>
+  <path d="M210 772c5 4 10 10 10 16" stroke="#402814" stroke-width="2" fill="none"/>
+  <ellipse cx="260" cy="860" rx="20" ry="14" transform="rotate(15 260 860)" fill="#6b4830"/>
+  <path d="M252 854c4 3 8 9 8 14" stroke="#402814" stroke-width="2" fill="none"/>
 </svg>

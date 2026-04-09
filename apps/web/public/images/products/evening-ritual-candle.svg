@@ -4,14 +4,49 @@
       <stop offset="0%" stop-color="#392c48"/>
       <stop offset="100%" stop-color="#8d70a0"/>
     </linearGradient>
+    <linearGradient id="wax" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#f6ebff"/>
+      <stop offset="100%" stop-color="#e8d8f0"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0%" stop-color="#ffd9a9" stop-opacity="0.6"/>
+      <stop offset="100%" stop-color="#ffd9a9" stop-opacity="0"/>
+    </radialGradient>
   </defs>
   <rect width="1200" height="1200" fill="url(#bg)"/>
-  <circle cx="602" cy="300" r="82" fill="#ffd9a9" opacity="0.9"/>
-  <path d="M602 174c26 44 62 92 62 144 0 34-27 62-62 62s-62-28-62-62c0-52 36-100 62-144z" fill="#ffe6bf"/>
-  <rect x="332" y="414" width="540" height="416" rx="88" fill="#f6ebff" opacity="0.92"/>
-  <path d="M404 510h396" stroke="#ccb4df" stroke-width="20" stroke-linecap="round"/>
-  <path d="M404 588h396" stroke="#ccb4df" stroke-width="20" stroke-linecap="round"/>
-  <text x="118" y="168" fill="#f9f0ff" font-size="32" font-family="Segoe UI, sans-serif" letter-spacing="6">HOME RITUAL</text>
-  <text x="118" y="936" fill="#fffdf9" font-size="106" font-family="Georgia, serif" font-weight="700">ZAVA</text>
-  <text x="118" y="1012" fill="#eadcf7" font-size="54" font-family="Segoe UI, sans-serif">Evening Ritual Candle</text>
+  <!-- Warm glow from flame -->
+  <circle cx="600" cy="340" r="260" fill="url(#glow)"/>
+  <!-- Shadow underneath -->
+  <ellipse cx="600" cy="920" rx="220" ry="28" fill="#2a1e34" opacity="0.3"/>
+  <!-- Glass jar -->
+  <rect x="370" y="440" width="460" height="440" rx="24" fill="#f6ebff" opacity="0.15"/>
+  <rect x="370" y="440" width="460" height="440" rx="24" fill="none" stroke="#e0d0ee" stroke-width="3" opacity="0.3"/>
+  <!-- Wax inside jar -->
+  <rect x="384" y="520" width="432" height="348" rx="16" fill="url(#wax)" opacity="0.92"/>
+  <!-- Wax surface (slightly uneven) -->
+  <path d="M384 520c40-8 100-4 150 2s110 4 150-2c40-6 90-4 132 0v10H384v-10z" fill="#ede0f4"/>
+  <!-- Wick -->
+  <rect x="596" y="380" width="8" height="140" rx="2" fill="#4a3a28"/>
+  <!-- Flame -->
+  <path d="M600 260c-18 36-40 70-40 110 0 30 18 54 40 54s40-24 40-54c0-40-22-74-40-110z" fill="#ffe6bf" opacity="0.9"/>
+  <path d="M600 300c-10 22-24 44-24 68 0 18 10 34 24 34s24-16 24-34c0-24-14-46-24-68z" fill="#ffd9a9"/>
+  <path d="M600 340c-5 12-14 26-14 40 0 10 6 20 14 20s14-10 14-20c0-14-9-28-14-40z" fill="#fff4e0"/>
+  <!-- Jar rim -->
+  <rect x="362" y="432" width="476" height="20" rx="10" fill="#e8d8f0" opacity="0.6"/>
+  <ellipse cx="600" cy="432" rx="238" ry="12" fill="#f0e4f8" opacity="0.4"/>
+  <!-- Lid (off to the side) -->
+  <g transform="translate(860, 780) rotate(-15)">
+    <rect x="0" y="0" width="120" height="26" rx="6" fill="#5a4868"/>
+    <rect x="4" y="4" width="112" height="18" rx="4" fill="#6b5878"/>
+    <rect x="40" y="-6" width="40" height="10" rx="4" fill="#5a4868"/>
+  </g>
+  <!-- Subtle wax pool around wick -->
+  <ellipse cx="600" cy="515" rx="50" ry="8" fill="#e0d0ee" opacity="0.4"/>
+  <!-- Glass jar reflection -->
+  <rect x="384" y="460" width="8" height="300" rx="4" fill="#fff" opacity="0.05"/>
+  <!-- Small decorative elements - cedar/herb sprigs nearby -->
+  <path d="M260 860c10-30 20-50 30-40s-5 30-10 50" fill="#6b5878" opacity="0.3"/>
+  <path d="M270 850c8-25 18-42 25-34s-3 26-8 42" fill="#7b6888" opacity="0.25"/>
+  <circle cx="920" cy="850" r="12" fill="#e8d8f0" opacity="0.15"/>
+  <circle cx="945" cy="840" r="8" fill="#e8d8f0" opacity="0.1"/>
 </svg>

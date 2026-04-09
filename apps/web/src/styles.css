@@ -557,4 +557,166 @@ a:hover {
   .main {
     padding: 1.5rem 1rem 3rem;
   }
+
+  .checkout__layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Checkout */
+.checkout {
+  display: grid;
+  gap: 1rem;
+}
+
+.checkout__layout {
+  display: grid;
+  grid-template-columns: 1.2fr 0.8fr;
+  gap: 2rem;
+  align-items: start;
+}
+
+.checkout__form-section {
+  display: grid;
+  gap: 1.5rem;
+}
+
+.checkout__section {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  padding: 1.5rem;
+  display: grid;
+  gap: 1rem;
+}
+
+.checkout__section-title {
+  font-family: var(--font-display);
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+.checkout__row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 1rem;
+}
+
+.checkout__field {
+  display: grid;
+  gap: 0.35rem;
+}
+
+.checkout__label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--color-text-muted);
+}
+
+.checkout__input {
+  padding: 0.7rem 0.9rem;
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  font-size: 0.95rem;
+  font-family: var(--font-body);
+  background: var(--color-surface-strong);
+  color: var(--color-text);
+  transition: border-color 0.2s;
+}
+
+.checkout__input:focus {
+  outline: none;
+  border-color: var(--color-bronze);
+}
+
+.checkout__summary {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  padding: 1.5rem;
+  position: sticky;
+  top: 5rem;
+  display: grid;
+  gap: 1.2rem;
+}
+
+.checkout__items {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.checkout__item {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+}
+
+.checkout__item-image {
+  width: 56px;
+  height: 56px;
+  object-fit: cover;
+  border-radius: 12px;
+}
+
+.checkout__item-info {
+  flex: 1;
+}
+
+.checkout__item-name {
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.checkout__item-qty {
+  font-size: 0.82rem;
+  color: var(--color-text-muted);
+}
+
+.checkout__item-price {
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.checkout__totals {
+  border-top: 1px solid var(--color-border);
+  padding-top: 1rem;
+  display: grid;
+  gap: 0.5rem;
+}
+
+.checkout__total-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.95rem;
+}
+
+.checkout__total-row--final {
+  padding-top: 0.5rem;
+  border-top: 1px solid var(--color-border);
+  font-size: 1.1rem;
+}
+
+.checkout__confirmation {
+  text-align: center;
+  padding: 4rem 2rem;
+}
+
+.checkout__check-icon {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: var(--color-olive);
+  color: white;
+  font-size: 2rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1.5rem;
+}
+
+.checkout__confirmation-text {
+  color: var(--color-text-muted);
+  max-width: 40ch;
+  margin: 0 auto;
+  font-size: 1.05rem;
 }

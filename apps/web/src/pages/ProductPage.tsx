@@ -51,8 +51,7 @@ export function ProductPage() {
             Add to Cart
           </button>
 
-          {/* Product reviews section will be added here during Demo 2. */}
-          {/* TODO(copilot): Add pagination to the reviews endpoint once reviews are live. */}
+
         </div>
       </div>
     </div>

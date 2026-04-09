@@ -3,11 +3,11 @@ import { Header } from '../components/Header';
 import { useCart } from '../hooks/useCart';
 
 export function MainLayout() {
-  const { itemCount, demoUserName, sessionReady } = useCart();
+  const { itemCount } = useCart();
 
   return (
     <>
-      <Header cartItemCount={itemCount} demoUserName={sessionReady ? demoUserName : 'Preparing demo session'} />
+      <Header cartItemCount={itemCount} />
       <main className="main">
         <Outlet />
       </main>

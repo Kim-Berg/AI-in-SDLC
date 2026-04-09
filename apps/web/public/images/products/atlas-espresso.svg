@@ -4,15 +4,59 @@
       <stop offset="0%" stop-color="#3b2419"/>
       <stop offset="100%" stop-color="#8a5638"/>
     </linearGradient>
+    <linearGradient id="bag" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#f8ebdd"/>
+      <stop offset="100%" stop-color="#e8d4be"/>
+    </linearGradient>
   </defs>
   <rect width="1200" height="1200" fill="url(#bg)"/>
-  <circle cx="964" cy="210" r="164" fill="#dca977" opacity="0.28"/>
-  <rect x="96" y="96" width="1008" height="1008" rx="36" fill="#fff7ee" opacity="0.08"/>
-  <path d="M332 338h436c78 0 140 63 140 140v46c0 77-62 140-140 140H332c-46 0-84-38-84-84V422c0-46 38-84 84-84z" fill="#f8ebdd"/>
-  <path d="M823 463h79c40 0 72 32 72 72s-32 72-72 72h-79" fill="none" stroke="#f8ebdd" stroke-width="34" stroke-linecap="round"/>
-  <path d="M340 292c62 8 104 31 128 68 19 29 25 61 18 98" fill="none" stroke="#f7cc9a" stroke-width="24" stroke-linecap="round"/>
-  <path d="M501 270c58 6 98 28 120 66 18 31 22 67 11 108" fill="none" stroke="#f7cc9a" stroke-width="24" stroke-linecap="round"/>
-  <text x="118" y="174" fill="#fff2e4" font-size="32" font-family="Segoe UI, sans-serif" letter-spacing="6">COFFEE</text>
-  <text x="118" y="936" fill="#fffdf9" font-size="106" font-family="Georgia, serif" font-weight="700">ZAVA</text>
-  <text x="118" y="1012" fill="#f6d1b1" font-size="54" font-family="Segoe UI, sans-serif">Atlas Espresso Blend</text>
+  <circle cx="920" cy="260" r="180" fill="#dca977" opacity="0.15"/>
+  <!-- Coffee bag body -->
+  <path d="M340 320h520v580c0 22-18 40-40 40H380c-22 0-40-18-40-40V320z" fill="url(#bag)"/>
+  <!-- Bag top fold -->
+  <path d="M320 320h560l-40-80H360z" fill="#e8d4be"/>
+  <path d="M360 240h480" stroke="#d4b896" stroke-width="4"/>
+  <!-- Bag crinkle top -->
+  <path d="M360 240c20-30 50-50 80-50h320c30 0 60 20 80 50" fill="none" stroke="#d4b896" stroke-width="3"/>
+  <path d="M380 230c15-20 40-36 60-36h320c20 0 45 16 60 36" fill="#f0e0cc" opacity="0.5"/>
+  <!-- Bag seal/clip -->
+  <rect x="440" y="215" width="320" height="16" rx="4" fill="#8a5638"/>
+  <!-- Coffee bean window circle -->
+  <circle cx="600" cy="560" r="140" fill="#5c3520"/>
+  <circle cx="600" cy="560" r="130" fill="#6b3f28"/>
+  <!-- Coffee beans inside window -->
+  <ellipse cx="560" cy="530" rx="32" ry="22" transform="rotate(-30 560 530)" fill="#3b2419"/>
+  <path d="M548 522c8 6 14 14 14 22" stroke="#2a1a10" stroke-width="2" fill="none"/>
+  <ellipse cx="640" cy="540" rx="32" ry="22" transform="rotate(20 640 540)" fill="#4a2d1a"/>
+  <path d="M628 532c8 6 14 14 14 22" stroke="#2a1a10" stroke-width="2" fill="none"/>
+  <ellipse cx="590" cy="580" rx="32" ry="22" transform="rotate(-10 590 580)" fill="#3b2419"/>
+  <path d="M578 572c8 6 14 14 14 22" stroke="#2a1a10" stroke-width="2" fill="none"/>
+  <ellipse cx="620" cy="590" rx="28" ry="20" transform="rotate(35 620 590)" fill="#4a2d1a"/>
+  <path d="M610 582c6 5 11 12 11 19" stroke="#2a1a10" stroke-width="2" fill="none"/>
+  <ellipse cx="570" cy="560" rx="26" ry="18" transform="rotate(15 570 560)" fill="#442818"/>
+  <!-- Subtle brand stripe on bag -->
+  <rect x="340" y="740" width="520" height="6" rx="3" fill="#8a5638" opacity="0.3"/>
+  <rect x="340" y="760" width="520" height="3" rx="1.5" fill="#8a5638" opacity="0.2"/>
+  <!-- Scattered loose beans around bag -->
+  <ellipse cx="240" cy="820" rx="28" ry="20" transform="rotate(-20 240 820)" fill="#5c3520"/>
+  <path d="M228 812c7 5 12 12 12 19" stroke="#3b2419" stroke-width="2" fill="none"/>
+  <ellipse cx="960" cy="780" rx="26" ry="18" transform="rotate(30 960 780)" fill="#5c3520"/>
+  <path d="M950 772c6 5 11 11 11 18" stroke="#3b2419" stroke-width="2" fill="none"/>
+  <ellipse cx="900" cy="860" rx="24" ry="16" transform="rotate(-40 900 860)" fill="#6b3f28"/>
+  <path d="M890 854c5 4 10 10 10 16" stroke="#3b2419" stroke-width="2" fill="none"/>
+  <ellipse cx="280" cy="900" rx="22" ry="15" transform="rotate(10 280 900)" fill="#6b3f28"/>
+  <!-- Espresso cup in front -->
+  <ellipse cx="820" cy="920" rx="110" ry="24" fill="#3b2419" opacity="0.3"/>
+  <path d="M730 740c0-20 16-36 36-36h108c20 0 36 16 36 36v160c0 30-24 54-54 54h-72c-30 0-54-24-54-54V740z" fill="#f8ebdd"/>
+  <ellipse cx="820" cy="730" rx="90" ry="22" fill="#e8d4be"/>
+  <ellipse cx="820" cy="730" rx="72" ry="16" fill="#4a2d1a"/>
+  <ellipse cx="820" cy="728" rx="72" ry="16" fill="#5c3520"/>
+  <!-- Crema on espresso -->
+  <ellipse cx="820" cy="728" rx="60" ry="12" fill="#c4873a" opacity="0.7"/>
+  <!-- Cup handle -->
+  <path d="M910 760c30 0 54 24 54 54s-24 54-54 54" fill="none" stroke="#f8ebdd" stroke-width="18" stroke-linecap="round"/>
+  <!-- Steam wisps -->
+  <path d="M800 700c-4-20 0-40 8-58" fill="none" stroke="#f8ebdd" stroke-width="3" opacity="0.4" stroke-linecap="round"/>
+  <path d="M820 695c0-22 6-42 4-62" fill="none" stroke="#f8ebdd" stroke-width="3" opacity="0.35" stroke-linecap="round"/>
+  <path d="M840 700c4-20 0-40-6-58" fill="none" stroke="#f8ebdd" stroke-width="3" opacity="0.3" stroke-linecap="round"/>
 </svg>

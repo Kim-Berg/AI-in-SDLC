@@ -4,6 +4,7 @@ import { AdminLayout } from './layouts/AdminLayout';
 import { HomePage } from './pages/HomePage';
 import { ProductPage } from './pages/ProductPage';
 import { CartPage } from './pages/CartPage';
+import { CheckoutPage } from './pages/CheckoutPage';
 import { CartProvider } from './hooks/useCart';
 
 export function App() {
@@ -15,9 +16,10 @@ export function App() {
             <Route path="/" element={<HomePage />} />
             <Route path="/products/:id" element={<ProductPage />} />
             <Route path="/cart" element={<CartPage />} />
+            <Route path="/checkout" element={<CheckoutPage />} />
           </Route>
           <Route path="/admin" element={<AdminLayout />}>
-            {/* Admin pages will be added here by Copilot agent demos */}
+
           </Route>
         </Routes>
       </BrowserRouter>

@@ -4,14 +4,48 @@
       <stop offset="0%" stop-color="#2f3d38"/>
       <stop offset="100%" stop-color="#7b9a82"/>
     </linearGradient>
+    <linearGradient id="body" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#c8b8a8"/>
+      <stop offset="30%" stop-color="#d6c8b8"/>
+      <stop offset="70%" stop-color="#c8b8a8"/>
+      <stop offset="100%" stop-color="#b8a898"/>
+    </linearGradient>
   </defs>
   <rect width="1200" height="1200" fill="url(#bg)"/>
-  <path d="M408 226h384l-34 742c-4 78-68 140-146 140h-24c-78 0-142-62-146-140l-34-742z" fill="#e8f2eb"/>
-  <rect x="456" y="150" width="288" height="106" rx="28" fill="#d6e7d9"/>
-  <path d="M484 452h232" stroke="#9fbba6" stroke-width="18" stroke-linecap="round"/>
-  <path d="M484 552h232" stroke="#9fbba6" stroke-width="18" stroke-linecap="round"/>
-  <path d="M484 652h232" stroke="#9fbba6" stroke-width="18" stroke-linecap="round"/>
-  <text x="118" y="168" fill="#eef8ef" font-size="32" font-family="Segoe UI, sans-serif" letter-spacing="6">ACCESSORIES</text>
-  <text x="118" y="936" fill="#fffdf9" font-size="106" font-family="Georgia, serif" font-weight="700">ZAVA</text>
-  <text x="118" y="1012" fill="#ddefdc" font-size="54" font-family="Segoe UI, sans-serif">Nomad Travel Tumbler</text>
+  <!-- Shadow underneath -->
+  <ellipse cx="600" cy="960" rx="200" ry="30" fill="#1a2820" opacity="0.3"/>
+  <!-- Tumbler body - brushed clay finish -->
+  <path d="M440 260h320l-20 700c-2 20-18 34-38 34H498c-20 0-36-14-38-34l-20-700z" fill="url(#body)"/>
+  <!-- Bottom ring -->
+  <ellipse cx="600" cy="960" rx="142" ry="18" fill="#b8a898"/>
+  <ellipse cx="600" cy="956" rx="138" ry="16" fill="#a89888"/>
+  <!-- Rubber base grip -->
+  <path d="M468 900h264l-6 56c-2 10-10 18-20 18H494c-10 0-18-8-20-18l-6-56z" fill="#5a6e60"/>
+  <path d="M468 900h264" stroke="#4a5e50" stroke-width="2"/>
+  <!-- Double wall indication - subtle line -->
+  <path d="M458 340h284" stroke="#baa898" stroke-width="1.5" opacity="0.4"/>
+  <!-- Lid - matte finish -->
+  <rect x="430" y="220" width="340" height="50" rx="10" fill="#d6c8b8"/>
+  <ellipse cx="600" cy="220" rx="170" ry="18" fill="#e0d4c6"/>
+  <ellipse cx="600" cy="218" rx="160" ry="14" fill="#d6c8b8"/>
+  <!-- Slide opening on lid -->
+  <rect x="530" y="208" width="140" height="16" rx="8" fill="#b8a898"/>
+  <rect x="530" y="208" width="70" height="16" rx="8" fill="#2f3d38" opacity="0.5"/>
+  <!-- Sip hole visible -->
+  <ellipse cx="565" cy="216" rx="16" ry="6" fill="#1a2820" opacity="0.4"/>
+  <!-- Vertical subtle texture lines (brushed finish) -->
+  <line x1="480" y1="280" x2="474" y2="900" stroke="#c0b0a0" stroke-width="1" opacity="0.15"/>
+  <line x1="520" y1="275" x2="510" y2="900" stroke="#c0b0a0" stroke-width="1" opacity="0.15"/>
+  <line x1="560" y1="272" x2="555" y2="900" stroke="#c0b0a0" stroke-width="1" opacity="0.15"/>
+  <line x1="600" y1="270" x2="600" y2="900" stroke="#c0b0a0" stroke-width="1" opacity="0.15"/>
+  <line x1="640" y1="272" x2="645" y2="900" stroke="#c0b0a0" stroke-width="1" opacity="0.15"/>
+  <line x1="680" y1="275" x2="690" y2="900" stroke="#c0b0a0" stroke-width="1" opacity="0.15"/>
+  <line x1="720" y1="280" x2="726" y2="900" stroke="#c0b0a0" stroke-width="1" opacity="0.15"/>
+  <!-- Highlight reflection -->
+  <path d="M490 300c-2 0-4 200-2 500" stroke="#fff" stroke-width="3" opacity="0.06" stroke-linecap="round"/>
+  <!-- A few coffee beans scattered nearby -->
+  <ellipse cx="280" cy="900" rx="22" ry="14" transform="rotate(-20 280 900)" fill="#3a4a40"/>
+  <path d="M270 892c5 4 9 9 9 14" stroke="#2a3830" stroke-width="2" fill="none"/>
+  <ellipse cx="900" cy="920" rx="20" ry="12" transform="rotate(25 900 920)" fill="#3a4a40"/>
+  <path d="M892 914c4 3 8 8 8 12" stroke="#2a3830" stroke-width="2" fill="none"/>
 </svg>

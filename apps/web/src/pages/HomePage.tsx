@@ -9,7 +9,7 @@ export function HomePage() {
   const [categories, setCategories] = useState<string[]>([]);
   const deferredCategory = useDeferredValue(selectedCategory === 'All' ? undefined : selectedCategory);
   const { products, loading, error } = useProducts(deferredCategory);
-  const { addItem, error: cartError, demoUserName, itemCount, sessionReady } = useCart();
+  const { addItem, error: cartError } = useCart();
 
   useEffect(() => {
     let active = true;
@@ -44,34 +44,20 @@ export function HomePage() {
     <>
       <section className="hero-panel">
         <div className="hero-panel__content">
-          <span className="hero-panel__eyebrow">AI in SDLC demo storefront</span>
-          <h1 className="hero-panel__title">A premium catalog shaped for Copilot demos, not placeholder scaffolding.</h1>
+          <span className="hero-panel__eyebrow">New Season Collection</span>
+          <h1 className="hero-panel__title">Elevate every cup, every ritual, every day.</h1>
           <p className="hero-panel__copy">
-            Zava now reads like a high-end retail experience: coffee blends, brewing gear, and lifestyle accessories with curated presentation, seeded demo identity, and a live cart session.
+            Discover our curated selection of specialty coffee, precision brewing gear, and lifestyle accessories designed for those who appreciate the finer details.
           </p>
-          <div className="hero-panel__stats">
-            <div className="stat-card">
-              <span className="stat-card__value">8</span>
-              <span className="stat-card__label">premium SKUs</span>
-            </div>
-            <div className="stat-card">
-              <span className="stat-card__value">{itemCount}</span>
-              <span className="stat-card__label">items in demo cart</span>
-            </div>
-            <div className="stat-card">
-              <span className="stat-card__value">{sessionReady ? demoUserName ?? 'Ready' : 'Syncing'}</span>
-              <span className="stat-card__label">active demo shopper</span>
-            </div>
-          </div>
         </div>
         <div className="hero-panel__aside">
           <div className="hero-note">
             <span className="hero-note__label">Collections</span>
-            <p>Blend discovery, barista equipment, and hospitality accessories in one richer storefront narrative.</p>
+            <p>From single-origin espresso blends to handcrafted brewing equipment and everyday carry essentials.</p>
           </div>
           <div className="hero-note">
-            <span className="hero-note__label">Demo flow</span>
-            <p>Plan reviews, build moderation, inspect security, then hand off wishlist and search to Copilot.</p>
+            <span className="hero-note__label">Free Shipping</span>
+            <p>Complimentary shipping on all orders over $75. Crafted with care, delivered to your door.</p>
           </div>
         </div>
       </section>
@@ -80,7 +66,7 @@ export function HomePage() {
         <div className="catalog-shell__header">
           <div>
             <h2 className="page-title">Curated Collections</h2>
-            <p className="catalog-shell__copy">Filter by merchandising lane while keeping the demo narrative anchored in retail quality.</p>
+            <p className="catalog-shell__copy">Browse by category to find exactly what you're looking for.</p>
           </div>
           <div className="category-filter" role="tablist" aria-label="Filter products by category">
             {categoryOptions.map((category) => (

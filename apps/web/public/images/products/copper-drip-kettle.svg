@@ -4,14 +4,50 @@
       <stop offset="0%" stop-color="#4c2d21"/>
       <stop offset="100%" stop-color="#b3704d"/>
     </linearGradient>
+    <linearGradient id="copper" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#e8a06a"/>
+      <stop offset="50%" stop-color="#d88758"/>
+      <stop offset="100%" stop-color="#c4703e"/>
+    </linearGradient>
+    <linearGradient id="copperDark" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#d88758"/>
+      <stop offset="100%" stop-color="#a85a30"/>
+    </linearGradient>
   </defs>
   <rect width="1200" height="1200" fill="url(#bg)"/>
-  <path d="M230 760c0-182 147-330 330-330s330 148 330 330H230z" fill="#fbe4d3"/>
-  <path d="M670 364c40-55 106-87 198-95" fill="none" stroke="#fbe4d3" stroke-width="26" stroke-linecap="round"/>
-  <path d="M900 288c88 0 160 72 160 160" fill="none" stroke="#fbe4d3" stroke-width="24" stroke-linecap="round"/>
-  <path d="M646 362c-7-92-60-145-160-157" fill="none" stroke="#f7b68e" stroke-width="24" stroke-linecap="round"/>
-  <path d="M398 760c24 96 87 145 190 145 98 0 165-49 201-145" fill="#d88758" opacity="0.45"/>
-  <text x="118" y="168" fill="#fff4eb" font-size="32" font-family="Segoe UI, sans-serif" letter-spacing="6">BREWING GEAR</text>
-  <text x="118" y="936" fill="#fffdf9" font-size="106" font-family="Georgia, serif" font-weight="700">ZAVA</text>
-  <text x="118" y="1012" fill="#f9dcc6" font-size="54" font-family="Segoe UI, sans-serif">Copper Drip Kettle</text>
+  <!-- Surface/counter -->
+  <rect x="100" y="880" width="1000" height="6" rx="3" fill="#fbe4d3" opacity="0.2"/>
+  <!-- Kettle body -->
+  <ellipse cx="540" cy="680" rx="220" ry="180" fill="url(#copper)"/>
+  <!-- Kettle bottom flat -->
+  <ellipse cx="540" cy="830" rx="180" ry="30" fill="#a85a30"/>
+  <ellipse cx="540" cy="826" rx="180" ry="28" fill="url(#copperDark)"/>
+  <!-- Kettle top opening -->
+  <ellipse cx="540" cy="520" rx="140" ry="28" fill="#c4703e"/>
+  <ellipse cx="540" cy="518" rx="130" ry="24" fill="#4c2d21" opacity="0.5"/>
+  <!-- Kettle lid -->
+  <ellipse cx="540" cy="510" rx="145" ry="30" fill="#e8a06a"/>
+  <ellipse cx="540" cy="506" rx="135" ry="26" fill="#d88758"/>
+  <!-- Lid knob -->
+  <ellipse cx="540" cy="486" rx="24" ry="10" fill="#c4703e"/>
+  <rect x="530" y="476" width="20" height="14" rx="4" fill="#b86838"/>
+  <ellipse cx="540" cy="476" rx="14" ry="6" fill="#d88758"/>
+  <!-- Gooseneck spout -->
+  <path d="M380 560c-60-10-110-40-140-90-30-50-35-100-15-150 20-50 60-80 120-90" fill="none" stroke="url(#copper)" stroke-width="28" stroke-linecap="round"/>
+  <path d="M345 230c15-5 30-2 40 8" fill="none" stroke="#e8a06a" stroke-width="22" stroke-linecap="round"/>
+  <!-- Spout opening -->
+  <ellipse cx="385" cy="232" rx="11" ry="6" fill="#4c2d21" opacity="0.6" transform="rotate(30 385 232)"/>
+  <!-- Water pouring from spout -->
+  <path d="M388 240c2 10 0 24-4 40" stroke="#fbe4d3" stroke-width="3" opacity="0.3" stroke-linecap="round"/>
+  <path d="M384 290c-2 14-6 30-12 48" stroke="#fbe4d3" stroke-width="2" opacity="0.2" stroke-linecap="round"/>
+  <!-- Handle -->
+  <path d="M740 480c60-20 100-10 120 30s10 90-20 130c-30 40-70 60-100 50" fill="none" stroke="#3a2218" stroke-width="26" stroke-linecap="round"/>
+  <path d="M740 480c60-20 100-10 120 30s10 90-20 130c-30 40-70 60-100 50" fill="none" stroke="#5c3828" stroke-width="18" stroke-linecap="round"/>
+  <!-- Highlight/reflection on body -->
+  <ellipse cx="480" cy="640" rx="40" ry="120" fill="#fff" opacity="0.06" transform="rotate(-10 480 640)"/>
+  <!-- Thermometer built into lid -->
+  <circle cx="600" cy="490" r="8" fill="#2d1810" opacity="0.3"/>
+  <circle cx="600" cy="490" r="5" fill="#c4703e"/>
+  <!-- Shadow underneath -->
+  <ellipse cx="540" cy="880" rx="240" ry="30" fill="#2d1810" opacity="0.25"/>
 </svg>

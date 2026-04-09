@@ -125,7 +125,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
     } catch (err) {
       clearStoredSession();
       setDemoUserName(null);
-      setError(err instanceof Error ? err.message : 'Failed to establish demo session');
+      setError(err instanceof Error ? err.message : 'Failed to establish session');
     } finally {
       setLoading(false);
     }
