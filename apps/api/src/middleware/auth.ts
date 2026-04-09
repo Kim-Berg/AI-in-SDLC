@@ -1,9 +1,12 @@
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
 
-// WARNING: The fallback value is for local development only.
-// In production, always set the JWT_SECRET environment variable.
-const JWT_SECRET = process.env.JWT_SECRET || 'zava-demo-secret-do-not-use-in-prod';
+// In production, JWT_SECRET must be set as an environment variable.
+// The fallback is only used for local development and testing.
+if (process.env.NODE_ENV === 'production' && !process.env.JWT_SECRET) {
+  throw new Error('JWT_SECRET environment variable is required in production');
+}
+const JWT_SECRET = process.env.JWT_SECRET || 'zava-dev-secret';
 
 export interface AuthenticatedRequest extends Request {
   userId?: string;
