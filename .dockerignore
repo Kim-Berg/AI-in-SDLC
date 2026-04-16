@@ -1,0 +1,42 @@
+# Dependencies (reinstalled in Docker)
+node_modules
+
+# Build outputs (rebuilt in Docker)
+apps/api/dist
+apps/web/dist
+packages/shared/dist
+
+# SQLite databases
+*.db
+*.db-journal
+
+# Environment files
+.env
+.env.*
+!.env.example
+!.env.docker
+
+# Git
+.git
+.gitignore
+
+# IDE
+.vscode
+*.swp
+*.swo
+
+# Test files (not needed in production images)
+**/*.test.ts
+**/*.test.tsx
+**/vitest.config.ts
+**/test-setup.ts
+coverage
+
+# Documentation
+*.md
+!README.md
+docs/
+
+# Scripts not needed in Docker
+scripts/
+apps/api/scripts/

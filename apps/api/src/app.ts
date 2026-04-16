@@ -7,7 +7,14 @@ import { errorHandler } from './middleware/error.js';
 
 export const app = express();
 
-app.use(cors());
+const corsOrigin = process.env.CORS_ORIGIN;
+app.use(
+  cors(
+    corsOrigin
+      ? { origin: corsOrigin.split(',').map((o) => o.trim()), credentials: true }
+      : undefined,
+  ),
+);
 app.use(express.json());
 
 app.get('/', (_req, res) => {

@@ -12,7 +12,9 @@
     "lint": "eslint src/",
     "db:push": "prisma db push",
     "db:seed": "tsx prisma/seed.ts",
-    "db:studio": "prisma studio"
+    "db:studio": "prisma studio",
+    "db:push:docker": "prisma db push --schema=prisma/schema.docker.prisma",
+    "db:seed:docker": "tsx prisma/seed.ts"
   },
   "dependencies": {
     "@zava/shared": "*",

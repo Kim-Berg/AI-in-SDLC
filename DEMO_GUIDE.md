@@ -37,6 +37,24 @@ Demonstrate GitHub Copilot agents across the full SDLC using a realistic e-comme
 Presenter A owns the flow arc: plan → implement → collaborate.  
 Presenter B owns the advanced toolkit: custom agents, quality gates, background work, and Q&A.
 
+## Deployment Workflow
+
+The app is containerized and deployed from the `live-demo` branch. The `main` branch stays clean so the audience can clone it and run locally.
+
+- **Branch**: `live-demo` — auto-deploys on push via GitHub Actions
+- **Pipeline**: push → GitHub Actions builds API + Web Docker images → pushes to ghcr.io → deploys to hosting platform
+- **Deploy time**: ~2 minutes — use this as a natural Q&A or recap moment during presenter handoffs
+- **Images**: `ghcr.io/<owner>/zava-storefront/api` and `ghcr.io/<owner>/zava-storefront/web`
+
+### Presenter Handoff Protocol
+
+Both presenters work against the same deployed app. When handing off, the outgoing presenter must push their changes so the incoming presenter has them both locally and on the deployed instance.
+
+1. **Commit & push** to `live-demo`
+2. **Wait for deploy** (~2 min) — fill with audience Q&A or a recap of what was just built
+3. **Incoming presenter pulls** `live-demo` and verifies the deployed app reflects the changes
+4. **Continue** with the next demo
+
 ## Demo 1 — Plan Agent (Presenter A, 7 min)
 
 **Prompt**
@@ -70,6 +88,10 @@ Presenter B owns the advanced toolkit: custom agents, quality gates, background 
 - The agent loop is iterative: plan → act → observe → adapt.
 - Copilot uses repo context, tool feedback, and errors to self-correct.
 - This is not generate-and-paste; it is execution with feedback.
+
+### Handoff A → B
+
+Presenter A commits the review system and pushes to `live-demo`. While the deploy runs (~2 min), recap what the agent built and take audience questions. Presenter B pulls `live-demo` and verifies the deployed app shows the new review features before starting Demo 3.
 
 ## Demo 3 — Custom Agents + Hooks + Subagents (Presenter B, 10 min)
 
@@ -140,6 +162,10 @@ Run two background sessions with worktree isolation.
 - Parallel sessions are useful when the work is independent.
 - Worktree isolation keeps the experiments reviewable.
 
+### Handoff B → A
+
+Presenter B commits and pushes to `live-demo`. While the deploy runs (~2 min), recap the custom agents and CLI workflow. Presenter A pulls `live-demo` and verifies the deployed app before starting Demo 6.
+
 ## Demo 6 — Cloud Agent (Presenter A, 8 min)
 
 ### 6a. Assign GitHub Issue #1 to Copilot
@@ -162,6 +188,8 @@ Use the inline comment sentinel in the review flow and show how a `TODO(copilot)
 
 ## Preparation Checklist
 
+### Repository & Local Setup
+
 - Create the GitHub repo and add both presenters as collaborators.
 - Run `npm install`.
 - Run `npm run db:push` and `npm run db:seed`.
@@ -170,9 +198,22 @@ Use the inline comment sentinel in the review flow and show how a `TODO(copilot)
 - Verify Chat modes are available: Ask, Plan, and Agent.
 - Verify hooks are enabled in VS Code.
 - Use the seeded GitHub issues: #1 for product search and #2 for wishlist.
+
+### Deployment Setup
+
+- Create the `live-demo` branch from `main`.
+- Set up the deployment platform and configure auto-deploy from `live-demo`.
+- Seed the production PostgreSQL database: `docker compose exec api npx prisma db seed --schema=prisma/schema.docker.prisma`.
+- Verify the deployed app is accessible from both presenters' machines.
+- Test the full push → deploy → verify cycle at least once from each presenter's machine.
+- Share the deployed app URL with both presenters.
+
+### Rehearsal
+
 - Dry-run each demo at least three times.
+- Practice the handoff protocol (push → deploy → pull → verify) between presenters.
 - Record fallback videos for each live demo.
-- Keep a browser tab open to the repo, issues, and PR view.
+- Keep browser tabs open to: the deployed app, the repo, GitHub Actions, issues, and PR view.
 
 ## Verification
 
@@ -191,6 +232,13 @@ Use the inline comment sentinel in the review flow and show how a `TODO(copilot)
 - Use Autopilot permission in Demos 2 and 5 for smoother flow.
 - Use Default Approvals in Demo 3 so the audience can see approval UX.
 - Keep the pre-seeded monorepo; it is the point of the demo.
+
+## Audience Handout
+
+- The `main` branch contains the clean starting point — audience members clone this to run locally.
+- Local setup: `npm install` → `npm run db:push` → `npm run db:seed` → `npm run dev`.
+- The deployed version URL can be shared for reference, but the audience should use `main` to experiment.
+- The `live-demo` branch contains all changes made during the session.
 
 ## Further Considerations
 
