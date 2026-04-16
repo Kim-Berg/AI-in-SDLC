@@ -6,11 +6,13 @@ on:
 
 env:
   REGISTRY: ghcr.io
+  RESOURCE_GROUP: Zava
 
 jobs:
-  build-and-push:
+  build-and-deploy:
     runs-on: ubuntu-latest
     permissions:
+      id-token: write
       contents: read
       packages: write
 
@@ -50,10 +52,23 @@ jobs:
             ${{ env.IMAGE_PREFIX }}/web:latest
             ${{ env.IMAGE_PREFIX }}/web:${{ github.sha }}
 
-      # ---------------------------------------------------------------
-      # TODO: Add a deploy step here once a platform is chosen.
-      # Examples:
-      #   - Fly.io:  flyctl deploy --image $IMAGE
-      #   - Azure Container Apps:  az containerapp update --image $IMAGE
-      #   - Railway: railway up
-      # ---------------------------------------------------------------
+      - name: Log in to Azure
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+      - name: Deploy API to Azure Container Apps
+        run: |
+          az containerapp update \
+            --name zava-api \
+            --resource-group ${{ env.RESOURCE_GROUP }} \
+            --image ${{ env.IMAGE_PREFIX }}/api:${{ github.sha }}
+
+      - name: Deploy Web to Azure Container Apps
+        run: |
+          az containerapp update \
+            --name zava-web \
+            --resource-group ${{ env.RESOURCE_GROUP }} \
+            --image ${{ env.IMAGE_PREFIX }}/web:${{ github.sha }}

@@ -90,6 +90,37 @@ Auth-protected routes require a `Bearer` token in the `Authorization` header. To
 - Auth uses JWT signed with the `JWT_SECRET` environment variable.
 - The SQLite database is stored at `apps/api/prisma/dev.db` (gitignored).
 
+## Docker (Local)
+
+Run the full stack with Docker Compose using PostgreSQL:
+
+```sh
+cp .env.example .env          # edit secrets for your environment
+docker compose up --build
+```
+
+The app will be available at `http://localhost:8080`. The API runs on port 3001.
+
+See `docker-compose.yml` for service details and environment variables.
+
+## Deployment (Azure)
+
+The repo includes infrastructure-as-code for Azure Container Apps:
+
+```sh
+# Provision Azure resources + OIDC federation for GitHub Actions
+.\infra\deploy.ps1 -GitHubRepo "owner/repo" -SubscriptionId "<your-subscription-id>"
+```
+
+This creates:
+- **Container Apps Environment** with API (internal) and Web (external) apps
+- **PostgreSQL Flexible Server** (Burstable B1ms)
+- **Entra ID app** with federated credentials for GitHub Actions OIDC (no stored secrets)
+
+Pushing to the `live-demo` branch triggers CI/CD via GitHub Actions: build → push to ghcr.io → deploy to Azure.
+
+See [DEMO_GUIDE.md](DEMO_GUIDE.md) for the full deployment setup checklist.
+
 ## License
 
-Private — not for redistribution.
+MIT

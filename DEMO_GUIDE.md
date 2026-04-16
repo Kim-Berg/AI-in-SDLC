@@ -199,12 +199,14 @@ Use the inline comment sentinel in the review flow and show how a `TODO(copilot)
 - Verify hooks are enabled in VS Code.
 - Use the seeded GitHub issues: #1 for product search and #2 for wishlist.
 
-### Deployment Setup
+### Deployment Setup (Azure)
 
-- Create the `live-demo` branch from `main`.
-- Set up the deployment platform and configure auto-deploy from `live-demo`.
-- Seed the production PostgreSQL database: `docker compose exec api npx prisma db seed --schema=prisma/schema.docker.prisma`.
-- Verify the deployed app is accessible from both presenters' machines.
+- Run `infra/deploy.ps1 -GitHubRepo "owner/repo" -SubscriptionId "<your-subscription-id>"` to provision Azure Container Apps, PostgreSQL, and OIDC federation.
+- Add the three GitHub secrets output by the script: `AZURE_CLIENT_ID`, `AZURE_TENANT_ID`, `AZURE_SUBSCRIPTION_ID`.
+- Create the `live-demo` branch from `main` and push to trigger the first build + deploy.
+- Make ghcr.io packages public: GitHub → Packages → each package → Settings → Change visibility.
+- Seed the production database: `az containerapp exec -n zava-api -g Zava --command '/bin/sh'` then `RUN_SEED=true npx tsx prisma/seed.ts`.
+- Verify the deployed app URL (from deploy script output) is accessible from both presenters' machines.
 - Test the full push → deploy → verify cycle at least once from each presenter's machine.
 - Share the deployed app URL with both presenters.
 

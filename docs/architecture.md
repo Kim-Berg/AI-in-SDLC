@@ -72,7 +72,26 @@ zava-storefront/
 ## Key design decisions
 
 1. **Prices in cents** — Avoids floating-point issues. The `formatPrice()` utility handles display.
-2. **SQLite** — Zero-config for demos. Swap to PostgreSQL for production via Prisma datasource.
+2. **SQLite** — Zero-config for local dev. PostgreSQL for Docker and production via a separate Prisma schema (`schema.docker.prisma`).
 3. **JWT auth** — Stateless tokens in `Authorization: Bearer <token>` header.
 4. **Vite proxy** — Avoids CORS in development; `/api` requests proxy to Express.
 5. **Monorepo with npm workspaces** — Shared types are imported as `@zava/shared`.
+
+## Production architecture
+
+```
+┌──────────────┐     ┌──────────────────┐     ┌──────────────┐
+│   Browser     │────▶│  Nginx (Web)     │────▶│   Express    │
+│  (React SPA)  │     │  Container App   │     │  Container   │
+│               │     │  (external)      │     │  App (int.)  │
+└──────────────┘     └──────────────────┘     └──────┬───────┘
+                                                       │
+                                                ┌──────▼───────┐
+                                                │  PostgreSQL   │
+                                                │  Flex Server  │
+                                                └──────────────┘
+```
+
+- **Web container**: Nginx serves the Vite-built SPA and reverse-proxies `/api` to the API container.
+- **API container**: Express with Prisma, connects to PostgreSQL.
+- **CI/CD**: GitHub Actions builds images on push to `live-demo`, pushes to ghcr.io, and updates Azure Container Apps via OIDC.

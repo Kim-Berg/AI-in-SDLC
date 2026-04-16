@@ -38,14 +38,18 @@ RUN npx vite build
 FROM nginx:alpine AS runtime
 
 # Remove default nginx config
-RUN rm /etc/nginx/conf.d/default.conf
+RUN rm -f /etc/nginx/conf.d/default.conf
 
-# Copy custom nginx config
-COPY apps/web/nginx.conf /etc/nginx/conf.d/default.conf
+# Copy nginx config as a template (envsubst replaces ${API_URL} at startup)
+COPY apps/web/nginx.conf /etc/nginx/conf.d/default.conf.template
 
 # Copy built static files
 COPY --from=build /app/apps/web/dist /usr/share/nginx/html
 
 EXPOSE 80
 
-CMD ["nginx", "-g", "daemon off;"]
+# Default API_URL for docker-compose; override for other environments
+ENV API_URL=http://api:3001
+
+# Substitute only $API_URL (preserve nginx variables like $uri, $host)
+CMD ["/bin/sh", "-c", "envsubst '$API_URL' < /etc/nginx/conf.d/default.conf.template > /etc/nginx/conf.d/default.conf && exec nginx -g 'daemon off;'"]
