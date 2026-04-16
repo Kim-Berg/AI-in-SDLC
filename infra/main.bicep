@@ -126,9 +126,24 @@ resource apiApp 'Microsoft.App/containerApps@2024-03-01' = {
           env: [
             { name: 'DATABASE_URL', secretRef: 'database-url' }
             { name: 'JWT_SECRET', secretRef: 'jwt-secret' }
-            { name: 'CORS_ORIGIN', value: '*' }
+            { name: 'CORS_ORIGIN', value: 'https://zava-web.${containerEnv.properties.defaultDomain}' }
             { name: 'PORT', value: '3001' }
             { name: 'NODE_ENV', value: 'production' }
+          ]
+          probes: [
+            {
+              type: 'Liveness'
+              httpGet: { path: '/api/health', port: 3001 }
+              initialDelaySeconds: 10
+              periodSeconds: 30
+            }
+            {
+              type: 'Readiness'
+              httpGet: { path: '/api/health', port: 3001 }
+              initialDelaySeconds: 5
+              periodSeconds: 10
+              failureThreshold: 3
+            }
           ]
         }
       ]
@@ -165,11 +180,26 @@ resource webApp 'Microsoft.App/containerApps@2024-03-01' = {
             { name: 'API_URL', value: 'http://zava-api' }
             { name: 'API_HOST', value: 'zava-api' }
           ]
+          probes: [
+            {
+              type: 'Liveness'
+              httpGet: { path: '/', port: 80 }
+              initialDelaySeconds: 5
+              periodSeconds: 30
+            }
+            {
+              type: 'Readiness'
+              httpGet: { path: '/', port: 80 }
+              initialDelaySeconds: 3
+              periodSeconds: 10
+              failureThreshold: 3
+            }
+          ]
         }
       ]
       scale: {
-        minReplicas: 0
-        maxReplicas: 1
+        minReplicas: 1
+        maxReplicas: 2
       }
     }
   }
