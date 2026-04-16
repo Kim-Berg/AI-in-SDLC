@@ -8,7 +8,7 @@
     "apps/*"
   ],
   "scripts": {
-    "dev": "npm run dev --workspaces --if-present",
+    "dev": "concurrently \"npm run dev:api\" \"npm run dev:web\"",
     "dev:api": "npm run dev -w apps/api",
     "dev:web": "npm run dev -w apps/web",
     "build": "npm run build --workspaces --if-present",
@@ -19,6 +19,7 @@
     "db:seed": "npm run db:seed -w apps/api"
   },
   "devDependencies": {
+    "concurrently": "^9.2.1",
     "prettier": "^3.3.0",
     "typescript": "^5.5.0"
   }
