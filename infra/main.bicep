@@ -133,7 +133,7 @@ resource apiApp 'Microsoft.App/containerApps@2024-03-01' = {
         }
       ]
       scale: {
-        minReplicas: 0
+        minReplicas: 1
         maxReplicas: 1
       }
     }
@@ -163,6 +163,7 @@ resource webApp 'Microsoft.App/containerApps@2024-03-01' = {
           }
           env: [
             { name: 'API_URL', value: 'http://zava-api' }
+            { name: 'API_HOST', value: 'zava-api' }
           ]
         }
       ]
