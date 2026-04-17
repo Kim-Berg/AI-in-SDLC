@@ -29,7 +29,7 @@ Demonstrate GitHub Copilot agents across the full SDLC using a realistic e-comme
 | 1 | Plan Agent: design a review & rating system | A | 7 min | Requirements → Design | Local — Plan |
 | 2 | Agent Loop: hand off plan to Agent, build the feature live | A | 10 min | Implementation | Local — Agent |
 | 3 | Custom Agents + Hooks + Subagents: TDD workflow with Red/Green/Refactor subagents, automated quality gates | B | 10 min | Implementation + Quality | Custom agents, Hooks, Subagents |
-| 4 | Ask Agent: codebase Q&A and security analysis | B | 5 min | Knowledge / Onboarding | Local — Ask |
+| 4 | Ask Agent: codebase Q&A and security analysis | B | 5 min | Knowledge / Onboarding | Local — Ask, Custom — `SE: Security` |
 | 5 | Copilot CLI: background implementation of admin panel + parallel email notifications | B | 8 min | Parallel Development | Copilot CLI (Background) |
 | 6 | Cloud Agent: assign GitHub Issue to Copilot, hand off Plan → Cloud, TODO comment assignment | A | 8 min | Code Review + Collaboration | Cloud |
 | — | Closing: SDLC recap, call to action | Both | 2 min | Wrap-up | — |
@@ -130,11 +130,11 @@ Instructions guide. Hooks enforce.
 
 ## Demo 4 — Ask Agent (Presenter B, 5 min)
 
-**Prompt 1**
+**Prompt 1** *(Ask agent)*
 
 > How does the cart system work? Walk me through the data flow from add-to-cart click to API persistence.
 
-**Prompt 2**
+**Prompt 2** *(`SE: Security` custom agent)*
 
 > What are the security considerations for the review system we just built?
 
@@ -142,6 +142,7 @@ Instructions guide. Hooks enforce.
 
 - Ask mode behaves like an always-available senior developer who reads the code.
 - Good answers follow imports, routes, shared types, and data flow.
+- Switch to the `SE: Security` custom agent for Prompt 2 — it applies OWASP Top 10 and Zero Trust framing to the actual implementation rather than giving generic advice.
 - Security analysis is more useful when it references the real implementation.
 
 ## Demo 5 — Copilot CLI (Presenter B, 8 min)
