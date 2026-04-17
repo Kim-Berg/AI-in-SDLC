@@ -29,7 +29,7 @@ Demonstrate GitHub Copilot agents across the full SDLC using a realistic e-comme
 | 1 | Plan Agent: design a review & rating system | A | 7 min | Requirements → Design | Local — Plan |
 | 2 | Agent Loop: hand off plan to Agent, build the feature live | A | 10 min | Implementation | Local — Agent |
 | 3 | Custom Agents + Hooks + Subagents: TDD workflow with Red/Green/Refactor subagents, automated quality gates | B | 10 min | Implementation + Quality | Custom agents, Hooks, Subagents |
-| 4 | Ask Agent: codebase Q&A and security analysis | B | 5 min | Knowledge / Onboarding | Local — Ask, Custom — `SE: Security` |
+| 4 | Ask Agent: codebase Q&A + Security Review | B | 5 min | Knowledge / Onboarding + Security Review | Local — Ask, Custom — `SE: Security` |
 | 5 | Copilot CLI: background implementation of admin panel + parallel email notifications | B | 8 min | Parallel Development | Copilot CLI (Background) |
 | 6 | Cloud Agent: assign GitHub Issue to Copilot, hand off Plan → Cloud, TODO comment assignment | A | 8 min | Code Review + Collaboration | Cloud |
 | — | Closing: SDLC recap, call to action | Both | 2 min | Wrap-up | — |
