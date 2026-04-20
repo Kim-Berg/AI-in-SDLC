@@ -23,16 +23,16 @@ Demonstrate GitHub Copilot agents across the full SDLC using a realistic e-comme
 
 ## Session Structure
 
-| # | Demo | Presenter | Duration | SDLC Phase | Agent Type |
-|---|------|-----------|----------|------------|------------|
-| — | Opening: agent types overview, agent loop concept, permission levels | A | 5 min | Concepts | — |
-| 1 | Plan Agent: design a review & rating system | A | 7 min | Requirements → Design | Local — Plan |
-| 2 | Agent Loop: hand off plan to Agent, build the feature live | A | 10 min | Implementation | Local — Agent |
-| 3 | Custom Agents + Hooks + Subagents: TDD workflow with Red/Green/Refactor subagents, automated quality gates | B | 10 min | Implementation + Quality | Custom agents, Hooks, Subagents |
-| 4 | Ask Agent: codebase Q&A and security analysis | B | 5 min | Knowledge / Onboarding | Local — Ask |
-| 5 | Copilot CLI: background implementation of admin panel + parallel email notifications | B | 8 min | Parallel Development | Copilot CLI (Background) |
-| 6 | Cloud Agent: assign GitHub Issue to Copilot, hand off Plan → Cloud, TODO comment assignment | A | 8 min | Code Review + Collaboration | Cloud |
-| — | Closing: SDLC recap, call to action | Both | 2 min | Wrap-up | — |
+| #   | Demo                                                                                                       | Presenter | Duration | SDLC Phase                               | Agent Type                           |
+| --- | ---------------------------------------------------------------------------------------------------------- | --------- | -------- | ---------------------------------------- | ------------------------------------ |
+| —   | Opening: agent types overview, agent loop concept, permission levels                                       | A         | 5 min    | Concepts                                 | —                                    |
+| 1   | Plan Agent: design a review & rating system                                                                | A         | 7 min    | Requirements → Design                    | Local — Plan                         |
+| 2   | Agent Loop: hand off plan to Agent, build the feature live                                                 | A         | 10 min   | Implementation                           | Local — Agent                        |
+| 3   | Custom Agents + Hooks + Subagents: TDD workflow with Red/Green/Refactor subagents, automated quality gates | B         | 10 min   | Implementation + Quality                 | Custom agents, Hooks, Subagents      |
+| 4   | Ask Agent: codebase Q&A + Security Review                                                                  | B         | 5 min    | Knowledge / Onboarding + Security Review | Local — Ask, Custom — `SE: Security` |
+| 5   | Copilot CLI: background implementation of admin panel + parallel email notifications                       | B         | 8 min    | Parallel Development                     | Copilot CLI (Background)             |
+| 6   | Cloud Agent: assign GitHub Issue to Copilot, hand off Plan → Cloud, TODO comment assignment                | A         | 8 min    | Code Review + Collaboration              | Cloud                                |
+| —   | Closing: SDLC recap, call to action                                                                        | Both      | 2 min    | Wrap-up                                  | —                                    |
 
 Presenter A owns the flow arc: plan → implement → collaborate.  
 Presenter B owns the advanced toolkit: custom agents, quality gates, background work, and Q&A.
@@ -121,7 +121,7 @@ Show `.github/hooks/quality.json` and explain the three hooks:
 **Live action**
 
 1. Trigger a normal edit so the formatting hook runs.
-2. Try a clearly dangerous terminal command to show the block.
+2. Ask: _"Discard all my uncommitted changes and reset to the last commit."_ — the agent will attempt `git reset --hard`, which the PreToolUse hook blocks.
 3. Let the session hit the Stop hook and continue until tests pass.
 
 **Talking point**
@@ -130,11 +130,11 @@ Instructions guide. Hooks enforce.
 
 ## Demo 4 — Ask Agent (Presenter B, 5 min)
 
-**Prompt 1**
+**Prompt 1** _(Ask agent)_
 
 > How does the cart system work? Walk me through the data flow from add-to-cart click to API persistence.
 
-**Prompt 2**
+**Prompt 2** _(`SE: Security` custom agent)_
 
 > What are the security considerations for the review system we just built?
 
@@ -142,25 +142,78 @@ Instructions guide. Hooks enforce.
 
 - Ask mode behaves like an always-available senior developer who reads the code.
 - Good answers follow imports, routes, shared types, and data flow.
+- Switch to the `SE: Security` custom agent for Prompt 2 — it applies OWASP Top 10 and Zero Trust framing to the actual implementation rather than giving generic advice.
 - Security analysis is more useful when it references the real implementation.
 
 ## Demo 5 — Copilot CLI (Presenter B, 8 min)
 
-Run two background sessions with worktree isolation.
+### What we are demonstrating
 
-**CLI Prompt A**
+The key feature here is **parallel background agents** via `copilot-cli`. Each `copilot coding` session runs in its own **git worktree**, so two agents can edit the same repo at the same time without conflicting. The audience should take away that Copilot can work on multiple independent tasks simultaneously while the developer continues their own work.
 
-> Add a review moderation admin panel — list pending reviews, approve/reject buttons, filter by product.
+### Terminal setup
 
-**CLI Prompt B**
+You need **two separate terminal windows** (or split panes) plus an optional third where you keep working. All three are visible to the audience.
 
-> Add email notification when a review is approved.
+| Terminal                    | Purpose                                          |
+| --------------------------- | ------------------------------------------------ |
+| **Terminal 1**              | Launch background session A (admin panel)        |
+| **Terminal 2**              | Launch background session B (email notification) |
+| **Terminal 3** _(optional)_ | Your normal dev work — shows you are not blocked |
 
-**Talking points**
+### Step-by-step
 
-- Background agents work while you keep coding.
-- Parallel sessions are useful when the work is independent.
-- Worktree isolation keeps the experiments reviewable.
+1. **Open two terminal windows** side by side in VS Code (use the split-terminal button or ⌘\\).
+
+2. **In Terminal 1**, start the first background agent:
+
+   ```bash
+   copilot coding --message "Add a review moderation admin panel — list pending reviews, approve/reject buttons, filter by product." --background
+   ```
+
+3. **In Terminal 2**, immediately start the second background agent:
+
+   ```bash
+   copilot coding --message "Add email notification when a review is approved." --background
+   ```
+
+4. **Show the audience** that both sessions are now running concurrently. Each one creates its own git worktree (visible under `.copilot-worktrees/` or as temporary branches). Point out the session IDs printed in each terminal.
+
+5. **While the agents work**, optionally switch to Terminal 3 and do something small (e.g., fix a typo, run `npm test`) to emphasise that you are not blocked.
+
+6. **Check progress** on either session:
+
+   ```bash
+   copilot coding --session <session-id> --status
+   ```
+
+7. **When a session completes**, review the diff:
+
+   ```bash
+   copilot coding --session <session-id> --diff
+   ```
+
+   Walk through the changes briefly — Session A should have added an admin moderation page that uses the existing `AdminLayout` stub, and Session B should have added an email service that fires when a review status changes to approved.
+
+8. **Merge or discard** — explain that each worktree result can be merged into the working branch, opened as a PR, or thrown away. For the live demo, merge both:
+
+   ```bash
+   copilot coding --session <session-id> --merge
+   ```
+
+### What each session builds
+
+| Session                    | Prompt                                                                                                   | Expected output                                                                                                                                                                                          |
+| -------------------------- | -------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **A — Admin Panel**        | _Add a review moderation admin panel — list pending reviews, approve/reject buttons, filter by product._ | New `AdminReviewsPage.tsx` under `apps/web/src/pages/`, a link in the `AdminLayout` sidebar, and API routes for listing/approving/rejecting reviews with proper auth middleware.                         |
+| **B — Email Notification** | _Add email notification when a review is approved._                                                      | An email service module (e.g., `apps/api/src/services/email.ts`), called from the review-approve route, with a stub transport suitable for dev (console log) and an interface ready for a real provider. |
+
+### Talking points
+
+- **Background agents work while you keep coding.** You launched two tasks and were never blocked.
+- **Parallel sessions are useful when the work is independent.** The admin panel and the email notification touch different parts of the codebase.
+- **Worktree isolation keeps the experiments reviewable.** Each session gets its own worktree — no merge conflicts between agents, and you can review each diff individually before merging.
+- **CLI mirrors the VS Code agent experience** — same tool loop (read → edit → run → observe), just driven from the terminal for automation and scripting scenarios.
 
 ### Handoff B → A
 
