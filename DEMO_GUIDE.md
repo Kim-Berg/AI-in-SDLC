@@ -121,7 +121,7 @@ Show `.github/hooks/quality.json` and explain the three hooks:
 **Live action**
 
 1. Trigger a normal edit so the formatting hook runs.
-2. Ask: _"Discard all my uncommitted changes and reset to the last commit."_ — the agent will attempt `git reset --hard`, which the PreToolUse hook blocks.
+2. Try a clearly dangerous terminal command to show the block.
 3. Let the session hit the Stop hook and continue until tests pass.
 
 **Talking point**
@@ -149,57 +149,77 @@ Instructions guide. Hooks enforce.
 
 ### What we are demonstrating
 
-The key feature here is **parallel background agents** via `copilot-cli`. Each `copilot coding` session runs in its own **git worktree**, so two agents can edit the same repo at the same time without conflicting. The audience should take away that Copilot can work on multiple independent tasks simultaneously while the developer continues their own work.
+The key feature is **running two Copilot CLI agents in parallel**, each in its own **git worktree**, so they edit the same repo concurrently without conflicting. The audience takeaway: independent tasks can be farmed out to separate agents while the developer keeps working.
 
 ### Terminal setup
 
-You need **two separate terminal windows** (or split panes) plus an optional third where you keep working. All three are visible to the audience.
+You need **two terminal windows** (split panes in VS Code) plus an optional third for your own work. All are visible to the audience.
 
-| Terminal                    | Purpose                                          |
-| --------------------------- | ------------------------------------------------ |
-| **Terminal 1**              | Launch background session A (admin panel)        |
-| **Terminal 2**              | Launch background session B (email notification) |
-| **Terminal 3** _(optional)_ | Your normal dev work — shows you are not blocked |
+| Terminal                    | Purpose                                                   |
+| --------------------------- | --------------------------------------------------------- |
+| **Terminal 1**              | Worktree A — admin panel agent                            |
+| **Terminal 2**              | Worktree B — email notification agent                     |
+| **Terminal 3** _(optional)_ | Main repo — your normal dev work (shows you're not blocked) |
 
 ### Step-by-step
 
-1. **Open two terminal windows** side by side in VS Code (use the split-terminal button or ⌘\\).
-
-2. **In Terminal 1**, start the first background agent:
+1. **Create two git worktrees** so each agent has its own working copy. Run from the main repo:
 
    ```bash
-   copilot coding --message "Add a review moderation admin panel — list pending reviews, approve/reject buttons, filter by product." --background
+   git worktree add ../zava-admin-panel -b demo/admin-panel
+   git worktree add ../zava-email-notify -b demo/email-notify
    ```
 
-3. **In Terminal 2**, immediately start the second background agent:
+2. **Open two terminal panes** side by side (split-terminal button or ⌘\\).
+
+3. **In Terminal 1**, cd into the first worktree and launch Copilot CLI in programmatic mode with `--yolo` (auto-approve all tools for the demo):
 
    ```bash
-   copilot coding --message "Add email notification when a review is approved." --background
+   cd ../zava-admin-panel
+   copilot -p "Add a review moderation admin panel — list pending reviews, approve/reject buttons, filter by product." --yolo
    ```
 
-4. **Show the audience** that both sessions are now running concurrently. Each one creates its own git worktree (visible under `.copilot-worktrees/` or as temporary branches). Point out the session IDs printed in each terminal.
-
-5. **While the agents work**, optionally switch to Terminal 3 and do something small (e.g., fix a typo, run `npm test`) to emphasise that you are not blocked.
-
-6. **Check progress** on either session:
+4. **In Terminal 2**, immediately do the same for the second task:
 
    ```bash
-   copilot coding --session <session-id> --status
+   cd ../zava-email-notify
+   copilot -p "Add email notification when a review is approved." --yolo
    ```
 
-7. **When a session completes**, review the diff:
+5. **While both agents work**, optionally switch to Terminal 3 (main repo) and do something small — e.g., run `npm test` or fix a typo — to emphasise you are not blocked.
+
+6. **When each session completes**, review the changes. Each worktree is on its own branch, so you can diff against main:
 
    ```bash
-   copilot coding --session <session-id> --diff
+   # From the main repo
+   git diff main..demo/admin-panel
+   git diff main..demo/email-notify
    ```
 
-   Walk through the changes briefly — Session A should have added an admin moderation page that uses the existing `AdminLayout` stub, and Session B should have added an email service that fires when a review status changes to approved.
-
-8. **Merge or discard** — explain that each worktree result can be merged into the working branch, opened as a PR, or thrown away. For the live demo, merge both:
+7. **Merge both branches** into your working branch:
 
    ```bash
-   copilot coding --session <session-id> --merge
+   git merge demo/admin-panel
+   git merge demo/email-notify
    ```
+
+8. **Clean up** the worktrees (or leave them for the audience to inspect):
+
+   ```bash
+   git worktree remove ../zava-admin-panel
+   git worktree remove ../zava-email-notify
+   ```
+
+### Command reference
+
+| Flag / option | Purpose |
+|---|---|
+| `copilot` | Start an interactive session (type prompts inside the TUI) |
+| `copilot -p "prompt"` | Programmatic mode — run one prompt then exit |
+| `--yolo` / `--allow-all-tools` | Auto-approve all tool usage (file edits, shell commands) |
+| `--allow-tool='shell(npm)'` | Auto-approve only specific tools |
+| `--resume` | Resume a previous session |
+| `--continue` | Resume the most recent session |
 
 ### What each session builds
 
@@ -210,9 +230,10 @@ You need **two separate terminal windows** (or split panes) plus an optional thi
 
 ### Talking points
 
-- **Background agents work while you keep coding.** You launched two tasks and were never blocked.
-- **Parallel sessions are useful when the work is independent.** The admin panel and the email notification touch different parts of the codebase.
-- **Worktree isolation keeps the experiments reviewable.** Each session gets its own worktree — no merge conflicts between agents, and you can review each diff individually before merging.
+- **Parallel agents work while you keep coding.** Two tasks launched, zero blocking.
+- **Parallel sessions need isolation.** Git worktrees give each agent its own working copy — no merge conflicts during execution.
+- **Review before merging.** Each branch is a self-contained diff you can inspect, cherry-pick, or discard.
+- **`--yolo` is a demo convenience** — in real use you'd scope permissions with `--allow-tool` to stay safe.
 - **CLI mirrors the VS Code agent experience** — same tool loop (read → edit → run → observe), just driven from the terminal for automation and scripting scenarios.
 
 ### Handoff B → A
