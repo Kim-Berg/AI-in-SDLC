@@ -1,4 +1,5 @@
 import { Router, Request, Response } from 'express';
+import { Prisma } from '@prisma/client';
 import { prisma } from '../models/prisma.js';
 
 export const productsRouter = Router();
@@ -35,9 +36,17 @@ function withRating<T extends { id: string }>(
 
 // GET /api/products — list all products
 productsRouter.get('/', async (req: Request, res: Response) => {
-  const { category } = req.query;
+  const { category, search } = req.query;
 
-  const where = category ? { category: String(category) } : {};
+  const where: Prisma.ProductWhereInput = {};
+  if (category) {
+    where.category = String(category);
+  }
+  const searchTerm = typeof search === 'string' ? search.trim() : '';
+  if (searchTerm) {
+    where.OR = [{ name: { contains: searchTerm } }, { description: { contains: searchTerm } }];
+  }
+
   const products = await prisma.product.findMany({
     where,
     orderBy: { createdAt: 'desc' },

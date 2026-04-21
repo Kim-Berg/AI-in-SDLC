@@ -7,10 +7,12 @@ import { api } from '../services/apiClient';
 export function HomePage() {
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [categories, setCategories] = useState<string[]>([]);
+  const [searchQuery, setSearchQuery] = useState('');
   const deferredCategory = useDeferredValue(
     selectedCategory === 'All' ? undefined : selectedCategory,
   );
-  const { products, loading, error } = useProducts(deferredCategory);
+  const deferredSearch = useDeferredValue(searchQuery.trim() ? searchQuery.trim() : undefined);
+  const { products, loading, error } = useProducts(deferredCategory, deferredSearch);
   const { addItem, error: cartError } = useCart();
 
   useEffect(() => {
@@ -79,19 +81,41 @@ export function HomePage() {
               Browse by category to find exactly what you're looking for.
             </p>
           </div>
-          <div className="category-filter" role="tablist" aria-label="Filter products by category">
-            {categoryOptions.map((category) => (
-              <button
-                key={category}
-                className={`category-filter__chip${selectedCategory === category ? ' category-filter__chip--active' : ''}`}
-                onClick={() => {
-                  handleSelectCategory(category);
+          <div className="catalog-shell__controls">
+            <label className="product-search" htmlFor="product-search-input">
+              <span className="sr-only">Search products</span>
+              <input
+                id="product-search-input"
+                type="search"
+                className="product-search__input"
+                placeholder="Search products..."
+                value={searchQuery}
+                onChange={(event) => {
+                  const next = event.target.value;
+                  startTransition(() => {
+                    setSearchQuery(next);
+                  });
                 }}
-                type="button"
-              >
-                {category}
-              </button>
-            ))}
+              />
+            </label>
+            <div
+              className="category-filter"
+              role="tablist"
+              aria-label="Filter products by category"
+            >
+              {categoryOptions.map((category) => (
+                <button
+                  key={category}
+                  className={`category-filter__chip${selectedCategory === category ? ' category-filter__chip--active' : ''}`}
+                  onClick={() => {
+                    handleSelectCategory(category);
+                  }}
+                  type="button"
+                >
+                  {category}
+                </button>
+              ))}
+            </div>
           </div>
         </div>
 
@@ -120,7 +144,11 @@ export function HomePage() {
         ) : null}
 
         {!loading && !error && products.length === 0 ? (
-          <div className="empty-state">No products available.</div>
+          <div className="empty-state">
+            {searchQuery.trim()
+              ? `No products match "${searchQuery.trim()}".`
+              : 'No products available.'}
+          </div>
         ) : null}
       </section>
     </>

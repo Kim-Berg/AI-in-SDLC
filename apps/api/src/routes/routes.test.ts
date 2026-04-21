@@ -71,6 +71,40 @@ describe('Products API', () => {
     expect(res.body.data[0].name).toBe('Test Sneakers');
   });
 
+  it('GET /api/products?search=jacket matches product name (case-insensitive)', async () => {
+    const res = await request(app).get('/api/products?search=jacket');
+    expect(res.status).toBe(200);
+    expect(res.body.data).toHaveLength(1);
+    expect(res.body.data[0].name).toBe('Test Jacket');
+  });
+
+  it('GET /api/products?search=shoes matches product description', async () => {
+    const res = await request(app).get('/api/products?search=shoes');
+    expect(res.status).toBe(200);
+    expect(res.body.data).toHaveLength(1);
+    expect(res.body.data[0].name).toBe('Test Sneakers');
+  });
+
+  it('GET /api/products?search combines with category filter', async () => {
+    const res = await request(app).get('/api/products?search=Test&category=Accessories');
+    expect(res.status).toBe(200);
+    expect(res.body.data).toHaveLength(1);
+    expect(res.body.data[0].name).toBe('Test Hat');
+  });
+
+  it('GET /api/products?search with no matches returns empty list', async () => {
+    const res = await request(app).get('/api/products?search=nonexistentterm');
+    expect(res.status).toBe(200);
+    expect(res.body.data).toHaveLength(0);
+    expect(res.body.total).toBe(0);
+  });
+
+  it('GET /api/products with empty search returns all products', async () => {
+    const res = await request(app).get('/api/products?search=');
+    expect(res.status).toBe(200);
+    expect(res.body.data).toHaveLength(3);
+  });
+
   it('GET /api/products/:id returns a single product', async () => {
     const all = await request(app).get('/api/products');
     const id = all.body.data[0].id;

@@ -62,10 +62,13 @@ export function clearCurrentSession(): void {
 
 export const api = {
   // Products
-  getProducts: (category?: string) =>
-    request<{ data: Product[]; total: number }>(
-      category ? `/products?category=${encodeURIComponent(category)}` : '/products',
-    ),
+  getProducts: (category?: string, search?: string) => {
+    const params = new URLSearchParams();
+    if (category) params.set('category', category);
+    if (search) params.set('search', search);
+    const qs = params.toString();
+    return request<{ data: Product[]; total: number }>(qs ? `/products?${qs}` : '/products');
+  },
 
   getProduct: (id: string) => request<Product>(`/products/${id}`),
 
