@@ -1,7 +1,13 @@
-import { describe, it, expect, beforeAll, afterAll } from 'vitest';
+import { describe, it, expect, beforeAll, afterAll, vi, afterEach } from 'vitest';
 import request from 'supertest';
 import { app } from '../app.js';
 import { prisma } from '../models/prisma.js';
+
+vi.mock('../services/email.js', () => ({
+  sendReviewApprovedEmail: vi.fn().mockResolvedValue(undefined),
+}));
+
+import { sendReviewApprovedEmail } from '../services/email.js';
 
 describe('GET /api/health', () => {
   it('returns ok status', async () => {
@@ -426,5 +432,112 @@ describe('Reviews API', () => {
       .delete(`/api/reviews/${target.id}`)
       .set('Authorization', `Bearer ${adminToken}`);
     expect(res.status).toBe(204);
+  });
+});
+
+describe('Review approval email notification', () => {
+  let customerToken: string;
+  let adminToken: string;
+  let productId: string;
+  let reviewId: string;
+
+  beforeAll(async () => {
+    await prisma.review.deleteMany();
+
+    const custRes = await request(app).post('/api/auth/register').send({
+      email: 'email-notify-customer@zava.com',
+      password: 'NotifyPass123',
+      name: 'Notify Customer',
+    });
+    customerToken = custRes.body.token;
+
+    await request(app).post('/api/auth/register').send({
+      email: 'email-notify-admin@zava.com',
+      password: 'NotifyPass123',
+      name: 'Notify Admin',
+    });
+    await prisma.user.update({
+      where: { email: 'email-notify-admin@zava.com' },
+      data: { role: 'admin' },
+    });
+    const adminLogin = await request(app).post('/api/auth/login').send({
+      email: 'email-notify-admin@zava.com',
+      password: 'NotifyPass123',
+    });
+    adminToken = adminLogin.body.token;
+
+    const prods = await request(app).get('/api/products');
+    productId = prods.body.data[0].id;
+
+    const reviewRes = await request(app)
+      .post(`/api/products/${productId}/reviews`)
+      .set('Authorization', `Bearer ${customerToken}`)
+      .send({ rating: 5, text: 'Absolutely love this product!' });
+    reviewId = reviewRes.body.id;
+  });
+
+  afterEach(() => {
+    vi.clearAllMocks();
+  });
+
+  afterAll(async () => {
+    await prisma.$disconnect();
+  });
+
+  it('sends an email when a hidden review is approved', async () => {
+    // First hide the review
+    await request(app)
+      .patch(`/api/admin/reviews/${reviewId}/status`)
+      .set('Authorization', `Bearer ${adminToken}`)
+      .send({ status: 'hidden' });
+
+    vi.clearAllMocks();
+
+    // Now approve it
+    const res = await request(app)
+      .patch(`/api/admin/reviews/${reviewId}/status`)
+      .set('Authorization', `Bearer ${adminToken}`)
+      .send({ status: 'visible' });
+
+    expect(res.status).toBe(200);
+    expect(res.body.status).toBe('visible');
+    expect(sendReviewApprovedEmail).toHaveBeenCalledOnce();
+    expect(sendReviewApprovedEmail).toHaveBeenCalledWith(
+      expect.objectContaining({
+        to: 'email-notify-customer@zava.com',
+        userName: 'Notify Customer',
+      }),
+    );
+  });
+
+  it('does not send an email when a review is hidden', async () => {
+    vi.clearAllMocks();
+
+    const res = await request(app)
+      .patch(`/api/admin/reviews/${reviewId}/status`)
+      .set('Authorization', `Bearer ${adminToken}`)
+      .send({ status: 'hidden' });
+
+    expect(res.status).toBe(200);
+    expect(sendReviewApprovedEmail).not.toHaveBeenCalled();
+  });
+
+  it('does not send an email when an already-visible review is set to visible again', async () => {
+    // Approve first
+    await request(app)
+      .patch(`/api/admin/reviews/${reviewId}/status`)
+      .set('Authorization', `Bearer ${adminToken}`)
+      .send({ status: 'visible' });
+
+    vi.clearAllMocks();
+
+    // Set visible again — no email expected
+    const res = await request(app)
+      .patch(`/api/admin/reviews/${reviewId}/status`)
+      .set('Authorization', `Bearer ${adminToken}`)
+      .send({ status: 'visible' });
+
+    expect(res.status).toBe(200);
+    expect(sendReviewApprovedEmail).not.toHaveBeenCalled();
   });
 });

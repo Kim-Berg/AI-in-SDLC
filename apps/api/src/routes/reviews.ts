@@ -4,6 +4,7 @@ import { Prisma } from '@prisma/client';
 import { prisma } from '../models/prisma.js';
 import { authenticate, requireAdmin, AuthenticatedRequest } from '../middleware/auth.js';
 import { validate } from '../middleware/validation.js';
+import { sendReviewApprovedEmail } from '../services/email.js';
 
 export const reviewsRouter = Router();
 
@@ -36,7 +37,7 @@ const statusSchema = z.object({
 
 type ReviewWithUser = Prisma.ReviewGetPayload<{ include: { user: { select: { name: true } } } }>;
 type ReviewWithUserAndProduct = Prisma.ReviewGetPayload<{
-  include: { user: { select: { name: true } }; product: { select: { name: true } } };
+  include: { user: { select: { name: true; email: true } }; product: { select: { name: true } } };
 }>;
 
 function serializeReview(review: ReviewWithUser) {
@@ -211,10 +212,18 @@ reviewsRouter.patch(
       where: { id: req.params.id },
       data: { status },
       include: {
-        user: { select: { name: true } },
+        user: { select: { name: true, email: true } },
         product: { select: { name: true } },
       },
     });
+
+    if (status === 'visible' && existing.status !== 'visible') {
+      sendReviewApprovedEmail({
+        to: updated.user.email,
+        userName: updated.user.name,
+        productName: updated.product.name,
+      }).catch((err) => console.error('[email] Failed to send review approval email:', err));
+    }
 
     res.json(serializeAdminReview(updated));
   },
