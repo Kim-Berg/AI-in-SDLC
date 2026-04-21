@@ -3,6 +3,7 @@ import cors from 'cors';
 import { productsRouter } from './routes/products.js';
 import { cartRouter } from './routes/cart.js';
 import { authRouter } from './routes/auth.js';
+import { reviewsRouter } from './routes/reviews.js';
 import { errorHandler } from './middleware/error.js';
 
 export const app = express();
@@ -143,6 +144,7 @@ app.get('/api/health', (_req, res) => {
 app.use('/api/auth', authRouter);
 app.use('/api/products', productsRouter);
 app.use('/api/cart', cartRouter);
+app.use('/api', reviewsRouter);
 
 // Error handling
 app.use(errorHandler);

@@ -15,7 +15,8 @@ interface ProductSeed {
 const productSeeds: ProductSeed[] = [
   {
     name: 'Zava Atlas Espresso Blend',
-    description: 'A structured espresso roast with dark cacao, candied orange, and a velvet finish built for flat whites and straight shots.',
+    description:
+      'A structured espresso roast with dark cacao, candied orange, and a velvet finish built for flat whites and straight shots.',
     price: 1899,
     category: 'Coffee',
     stock: 80,
@@ -23,7 +24,8 @@ const productSeeds: ProductSeed[] = [
   },
   {
     name: 'Zava Daybreak Filter Roast',
-    description: 'A bright everyday brew with bergamot lift, caramel sweetness, and a clean finish for slow mornings and all-day refills.',
+    description:
+      'A bright everyday brew with bergamot lift, caramel sweetness, and a clean finish for slow mornings and all-day refills.',
     price: 1799,
     category: 'Coffee',
     stock: 74,
@@ -31,7 +33,8 @@ const productSeeds: ProductSeed[] = [
   },
   {
     name: 'Zava Solstice Cold Brew Flight',
-    description: 'Three small-lot cold brew profiles designed for tasting pours, hosting trays, and a high-end retail demo shelf.',
+    description:
+      'Three small-lot cold brew profiles designed for tasting pours, hosting trays, and a high-end retail demo shelf.',
     price: 2499,
     category: 'Coffee',
     stock: 48,
@@ -39,7 +42,8 @@ const productSeeds: ProductSeed[] = [
   },
   {
     name: 'Zava Studio Pour-Over Kit',
-    description: 'A matte ceramic dripper, borosilicate server, and measured filter set tuned for precise home brewing without visual clutter.',
+    description:
+      'A matte ceramic dripper, borosilicate server, and measured filter set tuned for precise home brewing without visual clutter.',
     price: 12900,
     category: 'Brewing Gear',
     stock: 26,
@@ -47,7 +51,8 @@ const productSeeds: ProductSeed[] = [
   },
   {
     name: 'Zava Copper Drip Kettle',
-    description: 'A premium gooseneck kettle with balanced pour control, induction compatibility, and a silhouette that reads well on stage.',
+    description:
+      'A premium gooseneck kettle with balanced pour control, induction compatibility, and a silhouette that reads well on stage.',
     price: 9200,
     category: 'Brewing Gear',
     stock: 19,
@@ -55,7 +60,8 @@ const productSeeds: ProductSeed[] = [
   },
   {
     name: 'Zava Nomad Travel Tumbler',
-    description: 'Double-wall insulated drinkware in a brushed clay finish that keeps espresso hot and the product shelf visually cohesive.',
+    description:
+      'Double-wall insulated drinkware in a brushed clay finish that keeps espresso hot and the product shelf visually cohesive.',
     price: 4200,
     category: 'Accessories',
     stock: 65,
@@ -63,7 +69,8 @@ const productSeeds: ProductSeed[] = [
   },
   {
     name: 'Zava Evening Ritual Candle',
-    description: 'A cedar, neroli, and espresso wax blend designed to extend the coffee ritual into hospitality, gifting, and evening ambiance.',
+    description:
+      'A cedar, neroli, and espresso wax blend designed to extend the coffee ritual into hospitality, gifting, and evening ambiance.',
     price: 3600,
     category: 'Home Ritual',
     stock: 34,
@@ -71,7 +78,8 @@ const productSeeds: ProductSeed[] = [
   },
   {
     name: 'Zava Canvas Market Tote',
-    description: 'Heavyweight utility tote sized for beans, brewer gear, and a laptop so the brand extends naturally into work and travel.',
+    description:
+      'Heavyweight utility tote sized for beans, brewer gear, and a laptop so the brand extends naturally into work and travel.',
     price: 5400,
     category: 'Lifestyle',
     stock: 42,
@@ -85,6 +93,7 @@ async function main() {
   console.log('🌱 Seeding Zava database...');
 
   // Clean existing data
+  await prisma.review.deleteMany();
   await prisma.cartItem.deleteMany();
   await prisma.cart.deleteMany();
   await prisma.product.deleteMany();
@@ -103,7 +112,7 @@ async function main() {
 
   // Create test customer
   const customerPassword = await bcrypt.hash('Customer123!', 10);
-  await prisma.user.create({
+  const customer = await prisma.user.create({
     data: {
       email: 'customer@example.com',
       password: customerPassword,
@@ -113,11 +122,51 @@ async function main() {
   });
 
   // Create products
+  const createdProducts = [];
   for (const product of products) {
-    await prisma.product.create({ data: product });
+    const created = await prisma.product.create({ data: product });
+    createdProducts.push(created);
   }
 
-  console.log(`✅ Seeded ${products.length} products, 2 users`);
+  // Sample reviews from Maya on a handful of products
+  const reviewSeeds: Array<{
+    productIndex: number;
+    rating: number;
+    text: string;
+    status?: 'visible' | 'hidden';
+  }> = [
+    {
+      productIndex: 0,
+      rating: 5,
+      text: 'Incredible espresso — chocolatey, balanced, pulls beautifully.',
+    },
+    {
+      productIndex: 1,
+      rating: 4,
+      text: 'Great everyday filter coffee. Bright without being sharp.',
+    },
+    { productIndex: 3, rating: 5, text: 'The pour-over kit made my mornings ten times better.' },
+    {
+      productIndex: 5,
+      rating: 3,
+      text: 'Lid works, but I wish the insulation lasted longer.',
+      status: 'hidden',
+    },
+  ];
+
+  for (const r of reviewSeeds) {
+    await prisma.review.create({
+      data: {
+        productId: createdProducts[r.productIndex].id,
+        userId: customer.id,
+        rating: r.rating,
+        text: r.text,
+        status: r.status ?? 'visible',
+      },
+    });
+  }
+
+  console.log(`✅ Seeded ${products.length} products, 2 users, ${reviewSeeds.length} reviews`);
 }
 
 main()

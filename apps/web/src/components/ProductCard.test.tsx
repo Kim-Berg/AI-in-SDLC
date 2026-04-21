@@ -13,10 +13,10 @@ const product = {
   stock: 10,
 };
 
-function renderCard() {
+function renderCard(extraProps: Partial<React.ComponentProps<typeof ProductCard>> = {}) {
   return render(
     <BrowserRouter>
-      <ProductCard {...product} />
+      <ProductCard {...product} {...extraProps} />
     </BrowserRouter>,
   );
 }
@@ -46,5 +46,17 @@ describe('ProductCard', () => {
   it('shows Add to Cart button', () => {
     renderCard();
     expect(screen.getByText('Add to Cart')).toBeDefined();
+  });
+
+  it('renders rating summary when provided', () => {
+    renderCard({ rating: { average: 4.3, count: 7 } });
+    expect(screen.getByTestId('product-card-rating')).toBeDefined();
+    expect(screen.getByText('4.3')).toBeDefined();
+    expect(screen.getByText('(7)')).toBeDefined();
+  });
+
+  it('omits rating summary when there are no reviews', () => {
+    renderCard({ rating: { average: 0, count: 0 } });
+    expect(screen.queryByTestId('product-card-rating')).toBeNull();
   });
 });

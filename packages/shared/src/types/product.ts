@@ -1,3 +1,5 @@
+import type { ProductRatingSummary } from './review.js';
+
 export interface Product {
   id: string;
   name: string;
@@ -8,6 +10,7 @@ export interface Product {
   stock: number;
   createdAt: Date;
   updatedAt: Date;
+  rating?: ProductRatingSummary;
 }
 
 export interface CreateProductInput {

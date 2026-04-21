@@ -1,15 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
+import type { Product } from '@zava/shared';
 import { api } from '../services/apiClient';
-
-interface Product {
-  id: string;
-  name: string;
-  description: string;
-  price: number;
-  imageUrl: string;
-  category: string;
-  stock: number;
-}
 
 export function useProducts(category?: string) {
   const [products, setProducts] = useState<Product[]>([]);

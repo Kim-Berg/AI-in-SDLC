@@ -14,10 +14,18 @@ export interface AuthenticatedRequest extends Request {
   userRole?: string;
 }
 
-export async function authenticate(req: AuthenticatedRequest, res: Response, next: NextFunction): Promise<void> {
+export async function authenticate(
+  req: AuthenticatedRequest,
+  res: Response,
+  next: NextFunction,
+): Promise<void> {
   const authHeader = req.headers.authorization;
   if (!authHeader?.startsWith('Bearer ')) {
-    res.status(401).json({ message: 'Missing or invalid authorization header', code: 'UNAUTHORIZED', statusCode: 401 });
+    res.status(401).json({
+      message: 'Missing or invalid authorization header',
+      code: 'UNAUTHORIZED',
+      statusCode: 401,
+    });
     return;
   }
 
@@ -30,7 +38,9 @@ export async function authenticate(req: AuthenticatedRequest, res: Response, nex
     });
 
     if (!user) {
-      res.status(401).json({ message: 'Invalid or expired token', code: 'UNAUTHORIZED', statusCode: 401 });
+      res
+        .status(401)
+        .json({ message: 'Invalid or expired token', code: 'UNAUTHORIZED', statusCode: 401 });
       return;
     }
 
@@ -38,10 +48,20 @@ export async function authenticate(req: AuthenticatedRequest, res: Response, nex
     req.userRole = user.role;
     next();
   } catch {
-    res.status(401).json({ message: 'Invalid or expired token', code: 'UNAUTHORIZED', statusCode: 401 });
+    res
+      .status(401)
+      .json({ message: 'Invalid or expired token', code: 'UNAUTHORIZED', statusCode: 401 });
   }
 }
 
 export function signToken(userId: string, role: string): string {
   return jwt.sign({ userId, role }, JWT_SECRET, { expiresIn: '24h' });
+}
+
+export function requireAdmin(req: AuthenticatedRequest, res: Response, next: NextFunction): void {
+  if (req.userRole !== 'admin') {
+    res.status(403).json({ message: 'Admin access required', code: 'FORBIDDEN', statusCode: 403 });
+    return;
+  }
+  next();
 }
