@@ -7,15 +7,24 @@ import { validate } from '../middleware/validation.js';
 
 export const reviewsRouter = Router();
 
+const HTML_TAG_PATTERN = /<[a-z][\s\S]*?>/i;
+
+const reviewTextSchema = z
+  .string()
+  .trim()
+  .min(10)
+  .max(2000)
+  .refine((val) => !HTML_TAG_PATTERN.test(val), 'HTML tags are not allowed');
+
 const createReviewSchema = z.object({
   rating: z.number().int().min(1).max(5),
-  text: z.string().trim().min(1).max(2000),
+  text: reviewTextSchema,
 });
 
 const updateReviewSchema = z
   .object({
     rating: z.number().int().min(1).max(5).optional(),
-    text: z.string().trim().min(1).max(2000).optional(),
+    text: reviewTextSchema.optional(),
   })
   .refine((data) => data.rating !== undefined || data.text !== undefined, {
     message: 'At least one of rating or text must be provided',

@@ -263,7 +263,7 @@ describe('Reviews API', () => {
       const res = await request(app)
         .post(`/api/products/${productId}/reviews`)
         .set('Authorization', `Bearer ${customerToken}`)
-        .send({ rating: bad, text: 'Hi' });
+        .send({ rating: bad, text: 'This is a valid review text' });
       expect(res.status).toBe(400);
       expect(res.body.code).toBe('VALIDATION_ERROR');
     }
@@ -277,11 +277,38 @@ describe('Reviews API', () => {
     expect(res.status).toBe(400);
   });
 
+  it('POST /api/products/:id/reviews rejects text shorter than 10 characters', async () => {
+    const res = await request(app)
+      .post(`/api/products/${productId}/reviews`)
+      .set('Authorization', `Bearer ${customerToken}`)
+      .send({ rating: 4, text: 'Too short' });
+    expect(res.status).toBe(400);
+    expect(res.body.code).toBe('VALIDATION_ERROR');
+  });
+
+  it('POST /api/products/:id/reviews rejects text containing HTML tags', async () => {
+    const res = await request(app)
+      .post(`/api/products/${productId}/reviews`)
+      .set('Authorization', `Bearer ${customerToken}`)
+      .send({ rating: 4, text: 'This is a <script>alert("xss")</script> review text' });
+    expect(res.status).toBe(400);
+    expect(res.body.code).toBe('VALIDATION_ERROR');
+  });
+
+  it('POST /api/products/:id/reviews rejects text with HTML img tag', async () => {
+    const res = await request(app)
+      .post(`/api/products/${productId}/reviews`)
+      .set('Authorization', `Bearer ${customerToken}`)
+      .send({ rating: 4, text: 'Check out this <img src=x onerror=alert(1)> cool product' });
+    expect(res.status).toBe(400);
+    expect(res.body.code).toBe('VALIDATION_ERROR');
+  });
+
   it('POST /api/products/:id/reviews returns 404 for missing product', async () => {
     const res = await request(app)
       .post('/api/products/does-not-exist/reviews')
       .set('Authorization', `Bearer ${customerToken}`)
-      .send({ rating: 5, text: 'Nice' });
+      .send({ rating: 5, text: 'Nice product review' });
     expect(res.status).toBe(404);
   });
 
@@ -317,7 +344,7 @@ describe('Reviews API', () => {
     await request(app)
       .post(`/api/products/${productId}/reviews`)
       .set('Authorization', `Bearer ${otherToken}`)
-      .send({ rating: 5, text: 'Love it!' });
+      .send({ rating: 5, text: 'Love it so much!' });
 
     const res = await request(app).get('/api/products');
     const prod = res.body.data.find((p: { id: string }) => p.id === productId);

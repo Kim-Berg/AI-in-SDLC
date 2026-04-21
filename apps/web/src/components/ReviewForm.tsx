@@ -30,6 +30,14 @@ export function ReviewForm({ initialReview, onSubmit, onCancel }: ReviewFormProp
       setError('Please write a short review.');
       return;
     }
+    if (text.trim().length < 10) {
+      setError('Review must be at least 10 characters.');
+      return;
+    }
+    if (/<[a-z][\s\S]*?>/i.test(text)) {
+      setError('HTML tags are not allowed.');
+      return;
+    }
 
     setSubmitting(true);
     try {
