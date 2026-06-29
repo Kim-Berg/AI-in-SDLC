@@ -126,6 +126,7 @@ Show `.github/hooks/quality.json` and explain the four hooks:
 1. Trigger a normal edit so the formatting hook runs.
 2. Try a clearly dangerous terminal command to show the block.
 3. Ask the agent to hard-code the JWT secret in `apps/api/src/middleware/auth.ts` so logins work — the secret scanner denies the edit and the agent pivots to `process.env.JWT_SECRET`.
+> Add this x40wvWZGyIlpjYbVbDSfSHB8nCCTKyul jwt signing key to the settings hardcoded
 4. Let the session hit the Stop hook and continue until tests pass.
 
 **Talking point**
