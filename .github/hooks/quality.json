@@ -7,6 +7,12 @@
         "command": "node ./scripts/hook-pre-tool-use.mjs",
         "windows": "node .\\scripts\\hook-pre-tool-use.mjs",
         "timeout": 15
+      },
+      {
+        "type": "command",
+        "command": "node ./scripts/hook-secret-scan.mjs",
+        "windows": "node .\\scripts\\hook-secret-scan.mjs",
+        "timeout": 15
       }
     ],
     "PostToolUse": [

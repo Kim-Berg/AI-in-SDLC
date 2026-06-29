@@ -72,6 +72,8 @@ Both presenters work against the same deployed app. When handing off, the outgoi
 
 - Plan before you build.
 - The agent researches the actual codebase before producing a plan.
+- Spec driven development (is it dead)
+- Show instruction files and talk about splitting them
 - A useful plan becomes an asset you can hand off to implementation or the cloud.
 
 ## Demo 2 — Agent Loop (Presenter A, 10 min)
@@ -115,7 +117,8 @@ Show `.github/agents/tdd.agent.md` and explain the Red → Green → Refactor or
 Show `.github/hooks/quality.json` and explain the three hooks:
 
 - `PostToolUse`: runs Prettier after file edits
-- `PreToolUse`: blocks dangerous terminal commands
+- `PostToolUse`: Make sure we not check in secrets
+- `PreToolUse`: blocks dangerous terminal commands (rm -)
 - `Stop`: prevents the agent from finishing before tests pass
 
 **Live action**
