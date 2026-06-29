@@ -19,7 +19,7 @@ Demonstrate GitHub Copilot agents across the full SDLC using a realistic e-comme
 - Admin layout stub
 - Email service stub
 - Custom agents in `.github/agents/`
-- Workspace hooks in `.github/hooks/quality.json`
+- Workspace hooks in `.github/hooks/quality.json` (Prettier, dangerous-command block, secret scanner, test gate)
 
 ## Session Structure
 
@@ -114,7 +114,7 @@ Show `.github/agents/tdd.agent.md` and explain the Red → Green → Refactor or
 
 ### 3b. Hooks and quality gates
 
-Show `.github/hooks/quality.json` and explain the three hooks:
+Show `.github/hooks/quality.json` and explain the four hooks:
 
 - `PostToolUse`: runs Prettier after file edits
 - `PostToolUse`: Make sure we not check in secrets
@@ -125,11 +125,12 @@ Show `.github/hooks/quality.json` and explain the three hooks:
 
 1. Trigger a normal edit so the formatting hook runs.
 2. Try a clearly dangerous terminal command to show the block.
-3. Let the session hit the Stop hook and continue until tests pass.
+3. Ask the agent to hard-code the JWT secret in `apps/api/src/middleware/auth.ts` so logins work — the secret scanner denies the edit and the agent pivots to `process.env.JWT_SECRET`.
+4. Let the session hit the Stop hook and continue until tests pass.
 
 **Talking point**
 
-Instructions guide. Hooks enforce.
+Instructions guide. Hooks enforce. The secret scanner bridges into Demo 4 — it is a fast, best-effort guardrail, while GitHub Advanced Security push protection is the auditable backstop no one can quietly skip.
 
 ## Demo 4 — Ask Agent (Presenter B, 5 min)
 
@@ -158,10 +159,10 @@ The key feature is **running two Copilot CLI agents in parallel**, each in its o
 
 You need **two terminal windows** (split panes in VS Code) plus an optional third for your own work. All are visible to the audience.
 
-| Terminal                    | Purpose                                                   |
-| --------------------------- | --------------------------------------------------------- |
-| **Terminal 1**              | Worktree A — admin panel agent                            |
-| **Terminal 2**              | Worktree B — email notification agent                     |
+| Terminal                    | Purpose                                                     |
+| --------------------------- | ----------------------------------------------------------- |
+| **Terminal 1**              | Worktree A — admin panel agent                              |
+| **Terminal 2**              | Worktree B — email notification agent                       |
 | **Terminal 3** _(optional)_ | Main repo — your normal dev work (shows you're not blocked) |
 
 ### Step-by-step
@@ -215,14 +216,14 @@ You need **two terminal windows** (split panes in VS Code) plus an optional thir
 
 ### Command reference
 
-| Flag / option | Purpose |
-|---|---|
-| `copilot` | Start an interactive session (type prompts inside the TUI) |
-| `copilot -p "prompt"` | Programmatic mode — run one prompt then exit |
-| `--yolo` / `--allow-all-tools` | Auto-approve all tool usage (file edits, shell commands) |
-| `--allow-tool='shell(npm)'` | Auto-approve only specific tools |
-| `--resume` | Resume a previous session |
-| `--continue` | Resume the most recent session |
+| Flag / option                  | Purpose                                                    |
+| ------------------------------ | ---------------------------------------------------------- |
+| `copilot`                      | Start an interactive session (type prompts inside the TUI) |
+| `copilot -p "prompt"`          | Programmatic mode — run one prompt then exit               |
+| `--yolo` / `--allow-all-tools` | Auto-approve all tool usage (file edits, shell commands)   |
+| `--allow-tool='shell(npm)'`    | Auto-approve only specific tools                           |
+| `--resume`                     | Resume a previous session                                  |
+| `--continue`                   | Resume the most recent session                             |
 
 ### What each session builds
 
@@ -300,7 +301,7 @@ Use the inline comment sentinel in the review flow and show how a `TODO(copilot)
 - Plan agent produces a meaningful plan for the review feature.
 - Agent loop creates at least one API route and one React component.
 - TDD subagent cycle is visibly orchestrated in chat.
-- Hooks fire visibly: formatting after edit, Stop hook blocks until tests pass.
+- Hooks fire visibly: formatting after edit, secret scanner blocks hard-coded secrets, Stop hook blocks until tests pass.
 - Ask agent explains cart flow with correct file references.
 - Copilot CLI runs in background with worktree isolation.
 - Cloud agent picks up assigned issues and opens a PR.
