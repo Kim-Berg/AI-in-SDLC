@@ -117,7 +117,7 @@ Show `.github/agents/tdd.agent.md` and explain the Red → Green → Refactor or
 Show `.github/hooks/quality.json` and explain the four hooks:
 
 - `PostToolUse`: runs Prettier after file edits
-- `PostToolUse`: Make sure we not check in secrets
+- `PostToolUse`: Make sure we not check in secrets 
 - `PreToolUse`: blocks dangerous terminal commands (rm -)
 - `Stop`: prevents the agent from finishing before tests pass
 
@@ -130,13 +130,13 @@ Show `.github/hooks/quality.json` and explain the four hooks:
 
 **Talking point**
 
-Instructions guide. Hooks enforce. The secret scanner bridges into Demo 4 — it is a fast, best-effort guardrail, while GitHub Advanced Security push protection is the auditable backstop no one can quietly skip.
+Instructions guide. Hooks enforce. Non deterministic LLM, The secret scanner bridges into Demo 4 — it is a fast, best-effort guardrail, while GitHub Advanced Security push protection is the auditable backstop no one can quietly skip.
 
 ## Demo 4 — Ask Agent (Presenter B, 5 min)
 
-**Prompt 1** _(Ask agent)_
+**Prompt 1** _(Ask agent)_ (Skill )
 
-> How does the cart system work? Walk me through the data flow from add-to-cart click to API persistence.
+> How does the cart system work? Walk me through the data flow from add-to-cart click to API persistence. 
 
 **Prompt 2** _(`SE: Security` custom agent)_
 
