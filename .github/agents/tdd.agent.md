@@ -3,9 +3,9 @@ description: >
   TDD workflow orchestrator — drives the Red-Green-Refactor cycle.
   Use when implementing a new feature or fixing a bug using test-driven development.
 agents:
-  - Red
-  - Green
-  - Refactor
+  - red
+  - green
+  - refactor
 ---
 
 # TDD Agent
