@@ -90,6 +90,15 @@ Both presenters work against the same deployed app. When handing off, the outgoi
 - The agent loop is iterative: plan → act → observe → adapt.
 - Copilot uses repo context, tool feedback, and errors to self-correct.
 - This is not generate-and-paste; it is execution with feedback.
+- Model choice is part of directing the agent — spend your best reasoning model on the plan you'll reuse, your fastest model on the build loop. Pick deliberately per phase.
+
+**Narration cues** _(keep talking while the loop runs — name what you see)_
+
+- As each tool fires, say it out loud: "now it's reading the schema… now editing shared types… now running the build."
+- Call out the first type/test error and the self-correction: "it caught its own mistake and is fixing it — no human in the loop."
+- On each diff/checkpoint, say what changed and why before accepting it.
+- Tie it back to the plan: "this step maps to the API-endpoint section of the plan from Demo 1."
+- If the loop runs long, narrate the tools panel: read → edit → run → observe, repeating.
 
 ### Handoff A → B
 
@@ -174,7 +183,7 @@ You need **two terminal windows** (split panes in VS Code) plus an optional thir
    git worktree add ../zava-admin-panel -b demo/admin-panel
    git worktree add ../zava-email-notify -b demo/email-notify
    ```
-
+fp
 2. **Open two terminal panes** side by side (split-terminal button or ⌘\\).
 
 3. **In Terminal 1**, cd into the first worktree and launch Copilot CLI in programmatic mode with `--yolo` (auto-approve all tools for the demo):
@@ -191,7 +200,11 @@ You need **two terminal windows** (split panes in VS Code) plus an optional thir
    copilot -p "Add email notification when a review is approved." --yolo
    ```
 
-5. **While both agents work**, optionally switch to Terminal 3 (main repo) and do something small — e.g., run `npm test` or fix a typo — to emphasise you are not blocked.
+5. **While both agents work** (this is the longest unattended wait in the session — ~4–8 min), keep the audience engaged with a planned Terminal-3 task rather than dead air. Switch to Terminal 3 (main repo) and:
+   - Run `npm test` and walk through the existing suite while it runs.
+   - Make a small visible edit (fix a typo, tweak a label) and let the formatting hook fire — callback to Demo 3.
+   - Periodically flip back to Terminals 1 & 2 and narrate each agent's progress ("admin agent is scaffolding the page, email agent is wiring the transport").
+   - Use the worktree/parallelism talking points below to fill — they are written to cover this gap.
 
 6. **When each session completes**, review the changes. Each worktree is on its own branch, so you can diff against main:
 
@@ -237,6 +250,9 @@ You need **two terminal windows** (split panes in VS Code) plus an optional thir
 
 - **Parallel agents work while you keep coding.** Two tasks launched, zero blocking.
 - **Parallel sessions need isolation.** Git worktrees give each agent its own working copy — no merge conflicts during execution.
+- **Worktrees vs. branches.** A branch is just a pointer; a worktree is a second checked-out working directory sharing one `.git`. That's what lets two agents edit files simultaneously without stepping on each other.
+- **When to parallelize vs. sequence.** Independent tasks (admin panel vs. email) are ideal for parallel agents; tasks that touch the same files or depend on each other should run sequentially to avoid merge pain.
+- **Cost and token awareness.** Each background agent is a full session burning tokens independently — parallelism trades spend for wall-clock time. Worth it for independent work, wasteful for trivial edits.
 - **Review before merging.** Each branch is a self-contained diff you can inspect, cherry-pick, or discard.
 - **`--yolo` is a demo convenience** — in real use you'd scope permissions with `--allow-tool` to stay safe.
 - **CLI mirrors the VS Code agent experience** — same tool loop (read → edit → run → observe), just driven from the terminal for automation and scripting scenarios.
